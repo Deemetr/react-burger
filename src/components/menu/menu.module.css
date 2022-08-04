@@ -1,0 +1,25 @@
+.menu-list {
+  display: flex;
+  flex-direction: row;
+
+  list-style: none;
+}
+
+.burger-link {
+  display: flex;
+  align-items: center;
+}
+
+.menu-burger {
+  display: none;
+}
+
+@media screen and (max-width: 1439px) {
+  .menu-list {
+    display: none;
+  }
+
+  .menu-burger {
+    display: block;
+  }
+}
