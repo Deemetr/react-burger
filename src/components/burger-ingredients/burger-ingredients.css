@@ -1,0 +1,25 @@
+.burger-ingredients-wrapper {
+   width: 600px;
+   display: flex;
+   flex-direction: column;
+}
+
+.ingredients__list {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   row-gap: 40px;
+   gap: 24px;
+}
+
+.groups {
+
+}
+
+.group {
+   
+}
+
+.group__title {
+   
+}
