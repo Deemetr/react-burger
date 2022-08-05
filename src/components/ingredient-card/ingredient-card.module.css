@@ -9,28 +9,28 @@
    position: relative;
 }
 
-.ingredient__counter {
+.counter {
    position: absolute;
    top: 0;
    right: 0;
 }
 
-.ingredient__image {
+.image {
    width: 240px;
    height: 120px;
 }
 
-.ingredient__price {
+.price {
    display: flex;
    justify-content: center;
 }
 
-.ingredient__name {
+.name {
    color: #F2F2F3;
    text-align: center;
    height: 48px;
 }
 
-.price__value {
+.price-value {
    color: #F2F2F3;
 }

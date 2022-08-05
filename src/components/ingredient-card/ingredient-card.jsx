@@ -4,8 +4,9 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import "./ingredient-card.css";
-import { render } from "@testing-library/react";
+import { getClassName } from "../../utils";
+
+import style from "./ingredient-card.module.css";
 
 class IngredientCard extends React.Component {
   render() {
@@ -16,23 +17,33 @@ class IngredientCard extends React.Component {
     }
 
     return (
-      <div className="ingredient" onClick={() => this.handleClick(ingredient)}>
-        <div className="ingredient__counter">
+      <div
+        className={style.ingredient}
+        onClick={() => this.handleClick(ingredient)}
+      >
+        <div className={style.counter}>
           <Counter count={1} size="default" />
         </div>
         <img
-          className="ingredient__image"
+          className={style.image}
           src={ingredient.image}
           alt={ingredient.name}
         />
-        <div className="ingredient__price price mt-1 mb-1">
-          <span className="price__value text text_type_digits-default">
+        <div className={getClassName(style.price, "mt-1 mb-1")}>
+          <span
+            className={getClassName(
+              style["price-value"],
+              "text text_type_digits-default"
+            )}
+          >
             {ingredient.price}
           </span>
           &nbsp;
           <CurrencyIcon type="primary" />
         </div>
-        <span className="ingredient__name text text_type_main-default">
+        <span
+          className={getClassName(style.name, "text text_type_main-default")}
+        >
           {ingredient.name}
         </span>
       </div>
