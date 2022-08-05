@@ -25,6 +25,8 @@ class App extends React.Component {
           <BurgerConstructor
             selectedIngredients={this.state.selected}
             onIngredientDelete={this.onIngredientDelete}
+            top={this.state.top}
+            bottom={this.state.bottom}
           />
         </main>
       </React.Fragment>
@@ -50,7 +52,6 @@ class App extends React.Component {
       newState.selected.push(ingredient);
     }
 
-    newState.selected = this.generateIngredientsList(newState);
     this.setState(newState);
   };
 
@@ -61,20 +62,9 @@ class App extends React.Component {
     };
 
     newState.selected.splice(position, 1);
-    newState.selected = this.generateIngredientsList(newState);
 
     this.setState(newState);
   };
-
-  generateIngredientsList(state) {
-    const other = (state.selected || []).filter(
-      (item) =>
-        item.type === INGREDIENT_TYPES.MAIN ||
-        item.type === INGREDIENT_TYPES.SAUCE
-    );
-
-    return [state.top, ...other, state.bottom].filter((item) => !!item);
-  }
 
   setBuns(ingredient, newState) {
     if (!this.state.bottom) {

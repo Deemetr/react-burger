@@ -13,40 +13,54 @@ import { getClassName } from "../../utils";
 import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
-  const defineType = (ingredient, index) => {
-    if (index === 0 && ingredient.type === INGREDIENT_TYPES.BUN) {
-      return INGRIDIENT_POSITION.TOP;
-    }
-
-    if (ingredient.type === INGREDIENT_TYPES.BUN) {
-      return INGRIDIENT_POSITION.BOTTOM;
-    }
-
-    return undefined;
-  };
-
   return (
     <div className={getClassName(style["burger-constructor"], "mt-25")}>
-      {props.selectedIngredients.map((item, index) => (
-        <div className={style.position} key={index}>
-          {item.type !== INGREDIENT_TYPES.BUN && <DragIcon type="primary" />}
+      <div className={style.position}>
+        {props.top && (
           <ConstructorElement
-            type={defineType(item, index)}
-            isLocked={item.type === INGREDIENT_TYPES.BUN}
-            text={item.name}
-            price={item.price}
-            thumbnail={item.image}
-            handleClose={() => props.onIngredientDelete(index)}
+            type="top"
+            isLocked="true"
+            text={props.top.name}
+            price={props.top.price}
+            thumbnail={props.top.image}
           />
-        </div>
-      ))}
+        )}
+      </div>
+
+      <div className={style.middle}>
+        {props.selectedIngredients.map((item, index) => (
+          <div className={style.position} key={index}>
+            <DragIcon type="primary" />
+            <ConstructorElement
+              isLocked={item.type === INGREDIENT_TYPES.BUN}
+              text={item.name}
+              price={item.price}
+              thumbnail={item.image}
+              handleClose={() => props.onIngredientDelete(index)}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className={style.position}>
+        {props.bottom && (
+          <ConstructorElement
+            type="bottom"
+            isLocked="true"
+            text={props.bottom.name}
+            price={props.bottom.price}
+            thumbnail={props.bottom.image}
+            className={style.position}
+          />
+        )}
+      </div>
 
       <div className={getClassName(style.summary, "mt-10")}>
         <p className="mr-10">
           <span className="text text_type_digits-medium">
             {props.selectedIngredients.reduce(
               (acc, curr) => acc + curr.price,
-              0
+              (props.top?.price || 0) + (props.bottom?.price || 0)
             )}
           </span>
           &nbsp;

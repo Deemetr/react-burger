@@ -11,3 +11,15 @@
    row-gap: 40px;
    gap: 24px;
 }
+
+@media screen and (max-width: 1439px) {
+   .burger-ingredients-wrapper {
+     width: 500px
+   }
+ }
+ 
+ @media screen and (max-width: 1023px) {
+   .burger-ingredients-wrapper {
+     width: 400px
+   }
+ }
