@@ -1,21 +1,16 @@
 import React from "react";
+
 import {
   ConstructorElement,
   DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import { INGREDIENT_TYPES, INGRIDIENT_POSITION } from "../../constants";
+import { getClassName } from "../../utils";
 
-import "./burger-constructor.css";
-
-const initialDnDState = {
-  draggedFrom: null,
-  draggedTo: null,
-  isDragging: false,
-  originalOrder: [],
-  updatedOrder: [],
-};
+import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
   const defineType = (ingredient, index) => {
@@ -31,15 +26,10 @@ function BurgerConstructor(props) {
   };
 
   return (
-    <div className="burger-constructor mt-25 d-flex flex-column">
+    <div className={getClassName(style["burger-constructor"], "mt-25")}>
       {props.selectedIngredients.map((item, index) => (
-        <div
-          className="burger-constructor__position d-flex align-items-center"
-          key={index}
-        >
-          {item.type !== INGREDIENT_TYPES.BUN && (
-            <DragIcon type="primary" />
-          )}
+        <div className={style.position} key={index}>
+          {item.type !== INGREDIENT_TYPES.BUN && <DragIcon type="primary" />}
           <ConstructorElement
             type={defineType(item, index)}
             isLocked={item.type === INGREDIENT_TYPES.BUN}
@@ -51,7 +41,7 @@ function BurgerConstructor(props) {
         </div>
       ))}
 
-      <div className="summary d-flex align-items-center mt-10">
+      <div className={getClassName(style.summary, "mt-10")}>
         <p className="mr-10">
           <span className="text text_type_digits-medium">
             {props.selectedIngredients.reduce(
