@@ -12,7 +12,7 @@ function BurgerIngredients(props) {
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
       <TabContainer />
 
-      <div className="groups">
+      <div className={style.groups}>
         <div className="group mb-10 mt-10">
           <h3 className="group__title text text_type_main-medium mb-6">
             Булки
@@ -26,6 +26,7 @@ function BurgerIngredients(props) {
                   ingredient={item}
                   className="list-item"
                   onClick={props.onIngredientClick}
+                  count={props.counters.get(item._id) || 0}
                 />
               ))}
           </div>
@@ -42,6 +43,7 @@ function BurgerIngredients(props) {
                   ingredient={item}
                   className="list-item"
                   onClick={props.onIngredientClick}
+                  count={props.counters.get(item._id) || 0}
                 />
               ))}
           </div>
@@ -58,6 +60,7 @@ function BurgerIngredients(props) {
                   ingredient={item}
                   className="list-item"
                   onClick={props.onIngredientClick}
+                  count={props.counters.get(item._id) || 0}
                 />
               ))}
           </div>

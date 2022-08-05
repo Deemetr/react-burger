@@ -22,7 +22,7 @@ class IngredientCard extends React.Component {
         onClick={() => this.handleClick(ingredient)}
       >
         <div className={style.counter}>
-          <Counter count={1} size="default" />
+          <Counter count={this.props.count} size="default" />
         </div>
         <img
           className={style.image}

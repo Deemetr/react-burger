@@ -1,27 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 
-import { INGREDIENT_TYPES } from '../../constants';
-import { getClassName } from '../../utils';
+import { INGREDIENT_TYPES } from "../../constants";
+import { getClassName } from "../../utils";
 
-import style from './app.module.css';
+import style from "./app.module.css";
 
 class App extends React.Component {
   state = {
     selected: [],
     top: null,
     bottom: null,
+    counters: new Map(),
   };
 
   render() {
     return (
       <React.Fragment>
         <AppHeader />
-        <main className={getClassName(style.content, style.main) }>
-          <BurgerIngredients onIngredientClick={this.onIngredientClick} />
+        <main className={getClassName(style.content, style.main)}>
+          <BurgerIngredients
+            onIngredientClick={this.onIngredientClick}
+            counters={this.state.counters}
+          />
           <BurgerConstructor
             selectedIngredients={this.state.selected}
             onIngredientDelete={this.onIngredientDelete}
@@ -34,16 +38,19 @@ class App extends React.Component {
   }
 
   onIngredientClick = (ingredient) => {
-    const quantity = this.state.selected.filter(
-      (item) => item._id === ingredient._id
-    ).length;
-
-    if (quantity === 2 && ingredient.type === INGREDIENT_TYPES.BUN) {
+    if (
+      this.state.top &&
+      this.state.bottom &&
+      ingredient.type === INGREDIENT_TYPES.BUN
+    ) {
       return;
     }
 
+    const newCounters = this.increaseCounter(ingredient);
+
     const newState = {
       ...this.state,
+      counters: newCounters,
     };
 
     if (ingredient.type === INGREDIENT_TYPES.BUN) {
@@ -61,10 +68,33 @@ class App extends React.Component {
       selected: [...this.state.selected],
     };
 
-    newState.selected.splice(position, 1);
+    const [deletedIngredient] = newState.selected.splice(position, 1);
+    newState.counters = this.decreaseCounters(deletedIngredient);
 
     this.setState(newState);
   };
+
+  decreaseCounters(deletedIngredient) {
+    const newCounters = new Map(this.state.counters);
+
+    if (newCounters.has(deletedIngredient._id)) {
+      const newValue = newCounters.get(deletedIngredient._id) - 1;
+      newCounters.set(deletedIngredient._id, newValue);
+    }
+
+    return newCounters;
+  }
+
+  increaseCounter(ingredient) {
+    const newCounters = new Map(this.state.counters);
+
+    if (!newCounters.has(ingredient._id)) {
+      newCounters.set(ingredient._id, 0);
+    }
+    const newValue = newCounters.get(ingredient._id) + 1;
+    newCounters.set(ingredient._id, newValue);
+    return newCounters;
+  }
 
   setBuns(ingredient, newState) {
     if (!this.state.bottom) {

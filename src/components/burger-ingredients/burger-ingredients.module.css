@@ -12,6 +12,14 @@
    gap: 24px;
 }
 
+.groups {
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+
+  overflow-y: auto;
+}
+
 @media screen and (max-width: 1439px) {
    .burger-ingredients-wrapper {
      width: 500px

@@ -14,7 +14,7 @@ import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
   return (
-    <div className={getClassName(style["burger-constructor"], "mt-25")}>
+    <div className={getClassName(style["burger-constructor"], "mt-25", "pr-4")}>
       <div className={style.position}>
         {props.top && (
           <ConstructorElement
