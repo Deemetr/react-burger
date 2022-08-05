@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import TabContainer from "../tab-container/tab-container";
 import IngredientCard from "../ingredient-card/ingredient-card";
 import ingredients from "../../mocks/ingredients";
@@ -69,5 +71,10 @@ function BurgerIngredients(props) {
     </div>
   );
 }
+
+BurgerIngredients.propTypes = {
+  counters: PropTypes.instanceOf(Map),
+  onIngredientClick: PropTypes.func.isRequired,
+}; 
 
 export default BurgerIngredients;

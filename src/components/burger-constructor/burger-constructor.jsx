@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 import {
   ConstructorElement,
@@ -7,7 +8,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { INGREDIENT_TYPES, INGRIDIENT_POSITION } from "../../constants";
+import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
 
 import style from "./burger-constructor.module.css";
@@ -74,5 +75,12 @@ function BurgerConstructor(props) {
     </div>
   );
 }
+
+BurgerConstructor.propTypes = {
+  selectedIngredients: PropTypes.array.isRequired,
+  onIngredientDelete: PropTypes.func.isRequired,
+  top: PropTypes.object,
+  bottom: PropTypes.object
+}; 
 
 export default BurgerConstructor;

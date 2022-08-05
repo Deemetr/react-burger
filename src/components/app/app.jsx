@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -46,11 +46,9 @@ class App extends React.Component {
       return;
     }
 
-    const newCounters = this.increaseCounter(ingredient);
-
     const newState = {
       ...this.state,
-      counters: newCounters,
+      counters: this.increaseCounter(ingredient),
     };
 
     if (ingredient.type === INGREDIENT_TYPES.BUN) {

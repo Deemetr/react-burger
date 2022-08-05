@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import {
   CurrencyIcon,
   Counter,
@@ -58,5 +60,11 @@ class IngredientCard extends React.Component {
     this.props.onClick(ingredient);
   };
 }
+
+IngredientCard.propTypes = {
+  ingredient: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
+  count: PropTypes.number.isRequired,
+};
 
 export default IngredientCard;
