@@ -1,0 +1,36 @@
+.ingredient {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: space-between;
+
+   width: 272px;
+
+   position: relative;
+}
+
+.counter {
+   position: absolute;
+   top: 0;
+   right: 0;
+}
+
+.image {
+   width: 240px;
+   height: 120px;
+}
+
+.price {
+   display: flex;
+   justify-content: center;
+}
+
+.name {
+   color: #F2F2F3;
+   text-align: center;
+   height: 48px;
+}
+
+.price-value {
+   color: #F2F2F3;
+}

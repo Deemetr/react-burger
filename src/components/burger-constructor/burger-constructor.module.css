@@ -1,0 +1,42 @@
+.burger-constructor {
+  width: 600px;
+  gap: 16px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.position {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.middle {
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+
+  max-height: 280px;
+  overflow: auto;
+  overflow: overlay;
+  scroll-behavior: smooth;
+}
+
+@media screen and (max-width: 1439px) {
+  .burger-constructor {
+    width: 500px
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .burger-constructor {
+    width: 400px
+  }
+}
