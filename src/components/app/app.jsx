@@ -6,7 +6,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 
 import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
-import { getIngredients} from "../../services";
+import { getIngredients } from "../../services";
 
 import style from "./app.module.css";
 
@@ -24,15 +24,12 @@ function App() {
 
     increaseCounter(ingredient);
 
-    const newSelected = [...selected];
-
     if (ingredient.type === INGREDIENT_TYPES.BUN) {
       setBuns(ingredient);
-    } else {
-      newSelected.push(ingredient);
+      return;
     }
 
-    setSelected(newSelected);
+    setSelected([...selected, ingredient]);
   };
 
   const onIngredientDelete = (position) => {

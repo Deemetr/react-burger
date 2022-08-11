@@ -7,7 +7,7 @@ import { getClassName } from "../../utils";
 import style from "./burger-ingredients.module.css";
 
 function BurgerIngredients(props) {
-  const { ingredientGroups, ...other } = props;
+  const { ingredientGroups, ...otherProps } = props;
   debugger;
   return (
     <div className={getClassName(style["burger-ingredients-wrapper"], "mt-10")}>
@@ -20,7 +20,7 @@ function BurgerIngredients(props) {
             title={group.title}
             ingredients={group.items}
             key={group.title}
-            {...other}
+            {...otherProps}
           />
         ))}
       </div>
