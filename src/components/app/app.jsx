@@ -9,98 +9,95 @@ import { getClassName } from "../../utils";
 
 import style from "./app.module.css";
 
-class App extends React.Component {
-  state = {
-    selected: [],
-    top: null,
-    bottom: null,
-    counters: new Map(),
-  };
+function App() {
+  const [selected, setSelected] = React.useState([]);
+  const [topBun, setTopBun] = React.useState(null);
+  const [bottomBun, setBottomBun] = React.useState(null);
+  const [counters, setCounters] = React.useState(new Map());
 
-  render() {
-    return (
-      <React.Fragment>
-        <AppHeader />
-        <main className={getClassName(style.content, style.main)}>
-          <BurgerIngredients
-            onIngredientClick={this.onIngredientClick}
-            counters={this.state.counters}
-          />
-          <BurgerConstructor
-            selectedIngredients={this.state.selected}
-            onIngredientDelete={this.onIngredientDelete}
-            top={this.state.top}
-            bottom={this.state.bottom}
-          />
-        </main>
-      </React.Fragment>
-    );
-  }
-
-  onIngredientClick = (ingredient) => {
-    if (
-      this.state.top &&
-      this.state.bottom &&
-      ingredient.type === INGREDIENT_TYPES.BUN
-    ) {
+  const onIngredientClick = (ingredient) => {
+    if (hasBothBun() && ingredient.type === INGREDIENT_TYPES.BUN) {
       return;
     }
 
-    const newState = {
-      ...this.state,
-      counters: this.increaseCounter(ingredient),
-    };
+    increaseCounter(ingredient);
+
+    const newSelected = [...selected];
 
     if (ingredient.type === INGREDIENT_TYPES.BUN) {
-      this.setBuns(ingredient, newState);
+      setBuns(ingredient);
     } else {
-      newState.selected.push(ingredient);
+      newSelected.push(ingredient);
     }
 
-    this.setState(newState);
+    setSelected(newSelected);
   };
 
-  onIngredientDelete = (position) => {
-    const newState = {
-      ...this.state,
-      selected: [...this.state.selected],
-    };
+  const onIngredientDelete = (position) => {
+    const newSelected = [...selected];
 
-    const [deletedIngredient] = newState.selected.splice(position, 1);
-    newState.counters = this.decreaseCounters(deletedIngredient);
+    const [deletedIngredient] = newSelected.splice(position, 1);
+    decreaseCounters(deletedIngredient);
 
-    this.setState(newState);
+    setSelected(newSelected);
   };
 
-  decreaseCounters(deletedIngredient) {
-    const newCounters = new Map(this.state.counters);
+  const decreaseCounters = (deletedIngredient) => {
+    const newCounters = new Map(counters);
 
     if (newCounters.has(deletedIngredient._id)) {
-      const newValue = newCounters.get(deletedIngredient._id) - 1;
-      newCounters.set(deletedIngredient._id, newValue);
+      const decreasedValue = newCounters.get(deletedIngredient._id) - 1;
+      newCounters.set(deletedIngredient._id, decreasedValue);
     }
 
-    return newCounters;
-  }
+    setCounters(newCounters);
+  };
 
-  increaseCounter(ingredient) {
-    const newCounters = new Map(this.state.counters);
+  const increaseCounter = (ingredient) => {
+    const newCounters = new Map(counters);
 
     if (!newCounters.has(ingredient._id)) {
       newCounters.set(ingredient._id, 0);
     }
     const newValue = newCounters.get(ingredient._id) + 1;
     newCounters.set(ingredient._id, newValue);
-    return newCounters;
-  }
 
-  setBuns(ingredient, newState) {
-    if (!this.state.bottom) {
-      newState.bottom = { ...ingredient, name: `${ingredient.name} (низ)` };
-    } else if (!this.state.top) {
-      newState.top = { ...ingredient, name: `${ingredient.name} (верх)` };
+    setCounters(newCounters);
+  };
+
+  const setBuns = (ingredient) => {
+    if (!bottomBun) {
+      setBottomBun({ ...ingredient, name: `${ingredient.name} (низ)` });
+      return;
     }
-  }
+
+    if (!topBun) {
+      setTopBun({ ...ingredient, name: `${ingredient.name} (верх)` });
+      return;
+    }
+  };
+
+  const hasBothBun = () => {
+    return topBun && bottomBun;
+  };
+
+  return (
+    <React.Fragment>
+      <AppHeader />
+      <main className={getClassName(style.content, style.main)}>
+        <BurgerIngredients
+          onIngredientClick={onIngredientClick}
+          counters={counters}
+        />
+        <BurgerConstructor
+          selectedIngredients={selected}
+          onIngredientDelete={onIngredientDelete}
+          top={topBun}
+          bottom={bottomBun}
+        />
+      </main>
+    </React.Fragment>
+  );
 }
 
 export default App;
