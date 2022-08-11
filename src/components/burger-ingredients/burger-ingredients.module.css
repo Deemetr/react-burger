@@ -4,14 +4,6 @@
    flex-direction: column;
 }
 
-.ingredients__list {
-   display: flex;
-   flex-wrap: wrap;
-   justify-content: center;
-   row-gap: 40px;
-   gap: 24px;
-}
-
 .groups {
   display: flex;
   flex-direction: column;

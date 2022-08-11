@@ -6,6 +6,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 
 import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
+import { getIngredients} from "../../services";
 
 import style from "./app.module.css";
 
@@ -14,6 +15,7 @@ function App() {
   const [topBun, setTopBun] = React.useState(null);
   const [bottomBun, setBottomBun] = React.useState(null);
   const [counters, setCounters] = React.useState(new Map());
+  const [ingredientGroups, setIngredientGroups] = React.useState([]);
 
   const onIngredientClick = (ingredient) => {
     if (hasBothBun() && ingredient.type === INGREDIENT_TYPES.BUN) {
@@ -81,6 +83,15 @@ function App() {
     return topBun && bottomBun;
   };
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const ingredientGroups = await getIngredients();
+      setIngredientGroups(ingredientGroups);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <AppHeader />
@@ -88,6 +99,7 @@ function App() {
         <BurgerIngredients
           onIngredientClick={onIngredientClick}
           counters={counters}
+          ingredientGroups={ingredientGroups}
         />
         <BurgerConstructor
           selectedIngredients={selected}
