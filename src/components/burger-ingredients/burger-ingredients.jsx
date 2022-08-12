@@ -8,7 +8,7 @@ import style from "./burger-ingredients.module.css";
 
 function BurgerIngredients(props) {
   const { ingredientGroups, ...otherProps } = props;
-  debugger;
+  
   return (
     <div className={getClassName(style["burger-ingredients-wrapper"], "mt-10")}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
