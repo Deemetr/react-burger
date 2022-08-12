@@ -24,6 +24,7 @@ function App() {
     React.useState(false);
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
 
+  // eslint-disable-next-line
   const addIngredient = (ingredient) => {
     if (hasBothBun() && ingredient.type === INGREDIENT_TYPES.BUN) {
       return;
