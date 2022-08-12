@@ -125,7 +125,9 @@ function App() {
       onClose={handleIngredientDetailsCloseModal}
       modalRootId="modal-root"
     >
-      <IngredientDetails ingredient={currentIngredient} />
+      {currentIngredient && (
+        <IngredientDetails ingredient={currentIngredient} />
+      )}
     </Modal>
   );
 
