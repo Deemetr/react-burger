@@ -3,6 +3,9 @@ import React from "react";
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
@@ -16,8 +19,12 @@ function App() {
   const [bottomBun, setBottomBun] = React.useState(null);
   const [counters, setCounters] = React.useState(new Map());
   const [ingredientGroups, setIngredientGroups] = React.useState([]);
+  const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
+  const [ingredientDetailsVisible, setIngredientDetailsVisible] =
+    React.useState(false);
+  const [currentIngredient, setCurrentIngredient] = React.useState(null);
 
-  const onIngredientClick = (ingredient) => {
+  const addIngredient = (ingredient) => {
     if (hasBothBun() && ingredient.type === INGREDIENT_TYPES.BUN) {
       return;
     }
@@ -30,6 +37,11 @@ function App() {
     }
 
     setSelected([...selected, ingredient]);
+  };
+
+  const onIngredientClick = (ingredient) => {
+    setCurrentIngredient(ingredient);
+    setIngredientDetailsVisible(true);
   };
 
   const onIngredientDelete = (position) => {
@@ -80,6 +92,18 @@ function App() {
     return topBun && bottomBun;
   };
 
+  const handleOrderCloseModal = () => {
+    setOrderDetailsVisible(false);
+  };
+  const handleOrderOpenModal = () => {
+    setOrderDetailsVisible(true);
+  };
+
+  const handleIngredientDetailsCloseModal = () => {
+    setIngredientDetailsVisible(false);
+    setCurrentIngredient(null);
+  };
+
   React.useEffect(() => {
     const fetchData = async () => {
       const ingredientGroups = await getIngredients();
@@ -88,6 +112,22 @@ function App() {
 
     fetchData();
   }, []);
+
+  const orderDetailModal = (
+    <Modal title="" onClose={handleOrderCloseModal} modalRootId="modal-root">
+      <OrderDetails orderId="034536" />
+    </Modal>
+  );
+
+  const ingredientDetailsModal = (
+    <Modal
+      title="Детали ингредиента"
+      onClose={handleIngredientDetailsCloseModal}
+      modalRootId="modal-root"
+    >
+      <IngredientDetails ingredient={currentIngredient} />
+    </Modal>
+  );
 
   return (
     <React.Fragment>
@@ -103,7 +143,10 @@ function App() {
           onIngredientDelete={onIngredientDelete}
           top={topBun}
           bottom={bottomBun}
+          onOrderCreateClick={handleOrderOpenModal}
         />
+        {orderDetailsVisible && orderDetailModal}
+        {ingredientDetailsVisible && ingredientDetailsModal}
       </main>
     </React.Fragment>
   );
