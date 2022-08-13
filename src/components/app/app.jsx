@@ -149,7 +149,7 @@ function App() {
   );
 
   return (
-    <React.Fragment>
+    <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
         <BurgerIngredients
@@ -167,7 +167,7 @@ function App() {
         {orderDetailsVisible && orderDetailModal}
         {ingredientDetailsVisible && ingredientDetailsModal}
       </main>
-    </React.Fragment>
+    </>
   );
 }
 
