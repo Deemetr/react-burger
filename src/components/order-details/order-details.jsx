@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import style from "./order-details.module.css";
 import { getClassName } from "../../utils/";
 

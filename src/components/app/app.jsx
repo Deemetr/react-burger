@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -8,7 +8,7 @@ import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 
 import { INGREDIENT_TYPES } from "../../constants";
-import { getClassName } from "../../utils";
+import { getClassName, delay } from "../../utils";
 import { getIngredients } from "../../services";
 
 import style from "./app.module.css";
@@ -20,7 +20,7 @@ function App() {
   const [counters, setCounters] = React.useState(new Map());
   const [ingredientGroups, setIngredientGroups] = React.useState([]);
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
-  const [ingredientDetailsVisible, setIngredientDetailsVisible] =
+  const [ingredientModalVisible, setIngredientModalVisible] =
     React.useState(false);
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
 
@@ -42,7 +42,7 @@ function App() {
 
   const onIngredientClick = (ingredient) => {
     setCurrentIngredient(ingredient);
-    setIngredientDetailsVisible(true);
+    setIngredientModalVisible(true);
   };
 
   const onIngredientDelete = (position) => {
@@ -101,11 +101,15 @@ function App() {
   };
 
   const handleIngredientDetailsCloseModal = () => {
-    setIngredientDetailsVisible(false);
+    setIngredientModalVisible(false);
     setCurrentIngredient(null);
   };
 
-  React.useEffect(() => {
+  const closeAllModal = () => {
+    handleOrderCloseModal();
+    handleIngredientDetailsCloseModal();
+  };
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const ingredientGroups = await getIngredients();
@@ -118,17 +122,46 @@ function App() {
     fetchData();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ingredientGroups.length === 0) {
       return;
     }
 
     const [buns, sauces, main] = ingredientGroups;
+    const topBun = buns.items[0];
+    const bottomBun = buns.items[0];
+    const middle = [...main.items.slice(0, 2), ...sauces.items.slice(0, 2)];
+    const _counters = [topBun, bottomBun, ...middle].reduce(
+      (state, current) => {
+        if (!state.has(current._id)) {
+          state.set(current._id, 0);
+        }
+        const count = state.get(current._id);
+        state.set(current._id, count + 1);
+        return state;
+      },
+      new Map()
+    );
 
-    setTopBun(buns.items[0]);
-    setBottomBun(buns.items[0]);
-    setSelected([...main.items.slice(0, 2), ...sauces.items.slice(0, 2)]);
+    setCounters(_counters);
+    setTopBun(topBun);
+    setBottomBun(bottomBun);
+    setSelected([...middle]);
   }, [ingredientGroups]);
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === "Escape") {
+        closeAllModal();
+      }
+    }
+    if (orderDetailsVisible || ingredientModalVisible) {
+      document.addEventListener("keydown", closeByEscape);
+      return () => {
+        document.removeEventListener("keydown", closeByEscape);
+      };
+    }
+  }, [orderDetailsVisible, ingredientModalVisible]);
 
   const orderDetailModal = (
     <Modal title="" onClose={handleOrderCloseModal} modalRootId="modal-root">
@@ -165,7 +198,7 @@ function App() {
           onOrderCreateClick={handleOrderOpenModal}
         />
         {orderDetailsVisible && orderDetailModal}
-        {ingredientDetailsVisible && ingredientDetailsModal}
+        {ingredientModalVisible && ingredientDetailsModal}
       </main>
     </>
   );

@@ -10,14 +10,6 @@ import style from "./modal.module.css";
 function Modal(props) {
   const { children, title, onClose, modalRootId } = props;
 
-  React.useEffect(() => {
-    const closeOnEscape = (e) => (e.key === "Escape" ? onClose() : null);
-    document.body.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [onClose]);
-
   const createModalRoot = (modalRootId) => {
     const wrapperElement = document.createElement("div");
     wrapperElement.setAttribute("id", modalRootId);
