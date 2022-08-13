@@ -124,10 +124,9 @@ function App() {
     }
 
     const [buns, sauces, main] = ingredientGroups;
-    const topBun = buns.items[0];
-    const bottomBun = buns.items[0];
+    const bun = buns.items[0];
     const middle = [...main.items.slice(0, 2), ...sauces.items.slice(0, 2)];
-    const _counters = [topBun, bottomBun, ...middle].reduce(
+    const _counters = [bun, bun, ...middle].reduce(
       (state, current) => {
         if (!state.has(current._id)) {
           state.set(current._id, 0);
@@ -140,10 +139,8 @@ function App() {
     );
 
     setCounters(_counters);
-    topBun.name = `${topBun.name} (верх)`;
-    setTopBun(topBun);
-    bottomBun.name = `${bottomBun.name} (низ)`;
-    setBottomBun(bottomBun);
+    setBuns(bun);
+    setBuns(bun);
     setSelected([...middle]);
   }, [ingredientGroups]);
 
@@ -151,7 +148,6 @@ function App() {
     <Modal
       title=""
       onClose={handleOrderCloseModal}
-      modalRootId="modal-root"
       isOpen={orderDetailsVisible}
     >
       <OrderDetails orderId="034536" />
@@ -162,7 +158,6 @@ function App() {
     <Modal
       title="Детали ингредиента"
       onClose={handleIngredientDetailsCloseModal}
-      modalRootId="modal-root"
       isOpen={ingredientModalVisible}
     >
       {currentIngredient && (

@@ -8,7 +8,7 @@ import ModalHeader from "../modal-header/modal-header";
 import style from "./modal.module.css";
 
 function Modal(props) {
-  const { children, title, onClose, modalRootId, isOpen } = props;
+  const { children, title, onClose, modalRootId="modal-root", isOpen } = props;
 
   const createModalRoot = (modalRootId) => {
     const wrapperElement = document.createElement("div");
