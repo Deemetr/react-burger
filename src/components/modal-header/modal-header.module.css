@@ -1,0 +1,9 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.close-button-wrapper {
+  cursor: pointer;
+  align-self: flex-end;
+}

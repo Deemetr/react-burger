@@ -1,23 +1,4 @@
-.content {
-  width: 1280px;
-  margin: 0 auto;
-}
-
 .main {
   display: flex;
   justify-content: space-between;
-}
-
-@media screen and (max-width: 1439px) {
-  .content {
-    width: 900px;
-    margin: 0 auto;
-  }
-}
-
-@media screen and (max-width: 1023px) {
-  .content {
-    width: 800px;
-    margin: 0 auto;
-  }
 }

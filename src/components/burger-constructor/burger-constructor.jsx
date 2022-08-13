@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from 'prop-types';
 
 import {
@@ -15,7 +14,7 @@ import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
   return (
-    <div className={getClassName(style["burger-constructor"], "mt-25", "pr-4")}>
+    <div className={getClassName(style["burger-constructor"], "mt-25")}>
       <div className={style.position}>
         {props.top && (
           <ConstructorElement
@@ -68,7 +67,7 @@ function BurgerConstructor(props) {
           <CurrencyIcon type="primary" />
         </p>
 
-        <Button type="primary" size="large">
+        <Button onClick={props.onOrderCreateClick} type="primary" size="large">
           Оформить заказ
         </Button>
       </div>
@@ -80,7 +79,8 @@ BurgerConstructor.propTypes = {
   selectedIngredients: PropTypes.array.isRequired,
   onIngredientDelete: PropTypes.func.isRequired,
   top: PropTypes.object,
-  bottom: PropTypes.object
+  bottom: PropTypes.object,
+  onOrderCreateClick: PropTypes.func.isRequired
 }; 
 
 export default BurgerConstructor;
