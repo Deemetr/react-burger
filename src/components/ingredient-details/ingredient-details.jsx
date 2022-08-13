@@ -15,14 +15,14 @@ function IngredientDetails(props) {
         <source
           media="(max-width: 480px)"
           srcSet={props.ingredient.image_mobile}
-          alt="ingredient-image"
+          alt={`${props.ingredient.name}.`}
         />
         <source
           media="(max-width: 1024px)"
           srcSet={props.ingredient.image_large}
-          alt="ingredient-image"
+          alt={`${props.ingredient.name}.`}
         />
-        <img src={props.ingredient.image} alt="ingredient-image"></img>
+        <img src={props.ingredient.image} alt={`${props.ingredient.name}.`}></img>
       </picture>
       <p className="text text_type_main-medium mt-4  mb-8">
         {props.ingredient.name}

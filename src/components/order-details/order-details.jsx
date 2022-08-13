@@ -16,7 +16,7 @@ function OrderDetails(props) {
         className={getClassName(style.image, "mb-15")}
         src={acepted1x}
         srcSet={`${acepted2x} 2x, ${acepted3x} 3x`}
-        alt="acepted"
+        alt="Принято."
       />
       <p className="text text_type_main-default mb-2">Ваш заказ начали готовить</p>
       <p className="text text_type_main-default text_color_inactive mb-30">Дождитесь готовности на орбитальной станции</p>

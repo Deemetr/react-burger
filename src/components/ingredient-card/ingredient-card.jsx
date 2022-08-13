@@ -36,7 +36,7 @@ function IngredientCard(props) {
       <img
         className={style.image}
         src={ingredient.image}
-        alt={ingredient.name}
+        alt={`${ingredient.name}.`}
       />
       <div className={getClassName(style.price, "mt-1 mb-1")}>
         <span
