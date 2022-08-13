@@ -8,7 +8,7 @@ import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 
 import { INGREDIENT_TYPES } from "../../constants";
-import { getClassName, delay } from "../../utils";
+import { getClassName } from "../../utils";
 import { getIngredients } from "../../services";
 
 import style from "./app.module.css";
@@ -105,10 +105,6 @@ function App() {
     setCurrentIngredient(null);
   };
 
-  const closeAllModal = () => {
-    handleOrderCloseModal();
-    handleIngredientDetailsCloseModal();
-  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -151,22 +147,13 @@ function App() {
     setSelected([...middle]);
   }, [ingredientGroups]);
 
-  useEffect(() => {
-    function closeByEscape(evt) {
-      if (evt.key === "Escape") {
-        closeAllModal();
-      }
-    }
-    if (orderDetailsVisible || ingredientModalVisible) {
-      document.addEventListener("keydown", closeByEscape);
-      return () => {
-        document.removeEventListener("keydown", closeByEscape);
-      };
-    }
-  }, [orderDetailsVisible, ingredientModalVisible]);
-
   const orderDetailModal = (
-    <Modal title="" onClose={handleOrderCloseModal} modalRootId="modal-root">
+    <Modal
+      title=""
+      onClose={handleOrderCloseModal}
+      modalRootId="modal-root"
+      isOpen={orderDetailsVisible}
+    >
       <OrderDetails orderId="034536" />
     </Modal>
   );
@@ -176,6 +163,7 @@ function App() {
       title="Детали ингредиента"
       onClose={handleIngredientDetailsCloseModal}
       modalRootId="modal-root"
+      isOpen={ingredientModalVisible}
     >
       {currentIngredient && (
         <IngredientDetails ingredient={currentIngredient} />
