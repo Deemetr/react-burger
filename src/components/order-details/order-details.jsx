@@ -24,4 +24,8 @@ function OrderDetails(props) {
   );
 }
 
+OrderDetails.propsType = {
+  orderId: PropTypes.string,
+}
+
 export default OrderDetails;

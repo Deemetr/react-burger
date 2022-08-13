@@ -1,4 +1,5 @@
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
 
 import { getClassName } from "../../utils";
 
@@ -19,6 +20,11 @@ function ModalHeader(props) {
       </div>
     </div>
   );
+}
+
+ModalHeader.propsType = {
+  children: PropTypes.any,
+  onClose: PropTypes.func.isRequired,
 }
 
 export default ModalHeader;
