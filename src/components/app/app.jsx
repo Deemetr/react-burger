@@ -144,7 +144,9 @@ function App() {
     );
 
     setCounters(_counters);
+    topBun.name = `${topBun.name} (верх)`;
     setTopBun(topBun);
+    bottomBun.name = `${bottomBun.name} (низ)`;
     setBottomBun(bottomBun);
     setSelected([...middle]);
   }, [ingredientGroups]);
