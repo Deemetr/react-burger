@@ -1,5 +1,5 @@
 .burger-ingredients-wrapper {
-   width: 600px;
+   min-width: 600px;
    display: flex;
    flex-direction: column;
 }

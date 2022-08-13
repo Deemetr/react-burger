@@ -1,5 +1,5 @@
 .burger-constructor {
-  width: 600px;
+  min-width: 600px;
   gap: 16px;
 
   display: flex;
