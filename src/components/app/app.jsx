@@ -107,8 +107,12 @@ function App() {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const ingredientGroups = await getIngredients();
-      setIngredientGroups(ingredientGroups);
+      try {
+        const ingredientGroups = await getIngredients();
+        setIngredientGroups(ingredientGroups);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchData();
@@ -118,14 +122,13 @@ function App() {
     if (ingredientGroups.length === 0) {
       return;
     }
-    
-    const [buns, sauces, main] = ingredientGroups;
-    
-    setTopBun(buns.items[0]);
-    setBottomBun(buns.items[0])
-    setSelected([...main.items.slice(0, 2), ...sauces.items.slice(0, 2)])
 
-  }, [ingredientGroups])
+    const [buns, sauces, main] = ingredientGroups;
+
+    setTopBun(buns.items[0]);
+    setBottomBun(buns.items[0]);
+    setSelected([...main.items.slice(0, 2), ...sauces.items.slice(0, 2)]);
+  }, [ingredientGroups]);
 
   const orderDetailModal = (
     <Modal title="" onClose={handleOrderCloseModal} modalRootId="modal-root">
@@ -148,7 +151,7 @@ function App() {
   return (
     <React.Fragment>
       <AppHeader />
-      <main className={getClassName(style.main, 'content')}>
+      <main className={getClassName(style.main, "content")}>
         <BurgerIngredients
           onIngredientClick={onIngredientClick}
           counters={counters}

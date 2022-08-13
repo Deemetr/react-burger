@@ -2,7 +2,7 @@ import { fetchIngredients } from "./api/ingredients-api.service";
 import { INGREDIENT_TYPES } from "../constants";
 
 async function getIngredients() {
-  const ingredients = await fetchIngredients();
+  const { data: ingredients } = await fetchIngredients();
 
   const buns = ingredients.filter(
     (ingredient) => ingredient.type === INGREDIENT_TYPES.BUN
