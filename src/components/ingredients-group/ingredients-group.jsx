@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 
-import IngredientCard from "../ingredients-card/ingredient-card";
+import IngredientCard from "../ingredient-card/ingredient-card";
 
-import style from "./ingredient-group.module.css";
+import style from "./ingredients-group.module.css";
 
 function IngredientsGroup(props) {
   return (
