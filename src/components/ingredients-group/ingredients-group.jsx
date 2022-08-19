@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import IngredientCard from "../ingredient-card/ingredient-card";
+import IngredientCard from "../ingredients-card/ingredient-card";
 
 import style from "./ingredient-group.module.css";
 

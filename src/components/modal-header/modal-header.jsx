@@ -12,11 +12,7 @@ function ModalHeader(props) {
         {props.children}
       </h2>
       <div className={style["close-button-wrapper"]}>
-        <CloseIcon
-          
-          onClick={props.onClose}
-          type="primary"
-        />
+        <CloseIcon onClick={props.onClose} type="primary" />
       </div>
     </div>
   );
@@ -25,6 +21,6 @@ function ModalHeader(props) {
 ModalHeader.propsType = {
   children: PropTypes.any,
   onClose: PropTypes.func.isRequired,
-}
+};
 
 export default ModalHeader;
