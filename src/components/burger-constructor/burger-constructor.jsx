@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -44,6 +44,7 @@ function BurgerConstructor(props) {
       ...state,
       ...{ selected: [...middle, buns.items[0]] },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ingredients]);
 
   const setBuns = (ingredient) => {
@@ -67,6 +68,32 @@ function BurgerConstructor(props) {
     }
   };
 
+  const totalPrice = useMemo(() => {
+    return state.selected.reduce(
+      (acc, curr) =>
+        acc +
+        (curr.type === INGREDIENT_TYPES.BUN ? curr.price * 2 : curr.price),
+      0
+    );
+  }, [state.selected]);
+
+  const selectedIngredients = useMemo(() => {
+    return state.selected
+      .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
+      .map((item, index) => (
+        <div className={style.position} key={item.name}>
+          <DragIcon type="primary" />
+          <ConstructorElement
+            isLocked={item.type === INGREDIENT_TYPES.BUN}
+            text={item.name}
+            price={item.price}
+            thumbnail={item.image}
+            handleClose={() => props.onIngredientDelete(index)}
+          />
+        </div>
+      ));
+  }, [state.selected, props]);
+
   return (
     <div className={getClassName(style["burger-constructor"], "mt-25")}>
       <div className={style.position}>
@@ -80,24 +107,7 @@ function BurgerConstructor(props) {
           />
         )}
       </div>
-
-      <div className={style.middle}>
-        {state.selected
-          .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
-          .map((item, index) => (
-            <div className={style.position} key={index}>
-              <DragIcon type="primary" />
-              <ConstructorElement
-                isLocked={item.type === INGREDIENT_TYPES.BUN}
-                text={item.name}
-                price={item.price}
-                thumbnail={item.image}
-                handleClose={() => props.onIngredientDelete(index)}
-              />
-            </div>
-          ))}
-      </div>
-
+      <div className={style.middle}>{selectedIngredients}</div>
       <div className={style.position}>
         {bottomBun && (
           <ConstructorElement
@@ -113,16 +123,7 @@ function BurgerConstructor(props) {
 
       <div className={getClassName(style.summary, "mt-10")}>
         <p className="mr-10">
-          <span className="text text_type_digits-medium">
-            {state.selected.reduce(
-              (acc, curr) =>
-                acc +
-                (curr.type === INGREDIENT_TYPES.BUN
-                  ? curr.price * 2
-                  : curr.price),
-              0
-            )}
-          </span>
+          <span className="text text_type_digits-medium">{totalPrice}</span>
           &nbsp;
           <CurrencyIcon type="primary" />
         </p>
@@ -140,4 +141,3 @@ BurgerConstructor.propTypes = {
 };
 
 export default BurgerConstructor;
-
