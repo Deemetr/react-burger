@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -11,86 +11,35 @@ import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
 import { getIngredients } from "../../services";
 
+import { BurgerConstructorContext } from "../../contexts/burger-constructor.context";
+import { IngredientsContext } from "../../contexts/ingredients.context";
+
 import style from "./app.module.css";
 
 function App() {
-  const [selected, setSelected] = React.useState([]);
-  const [topBun, setTopBun] = React.useState(null);
-  const [bottomBun, setBottomBun] = React.useState(null);
+  const [constructorState, setConstructorState] = React.useState({
+    selected: [],
+    orderId: null,
+  });
+  const [ingredients, setIngredients] = React.useState([]);
   const [counters, setCounters] = React.useState(new Map());
-  const [ingredientGroups, setIngredientGroups] = React.useState([]);
+
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
-  const [ingredientModalVisible, setIngredientModalVisible] =
-    React.useState(false);
+  const [ingredientVisible, setIngredientVisible] = React.useState(false);
+
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
 
-  // eslint-disable-next-line
-  const addIngredient = (ingredient) => {
-    if (hasBothBun() && ingredient.type === INGREDIENT_TYPES.BUN) {
-      return;
-    }
+  const [currentTab, setCurrentTab] = React.useState("bread");
 
-    increaseCounter(ingredient);
-
-    if (ingredient.type === INGREDIENT_TYPES.BUN) {
-      setBuns(ingredient);
-      return;
-    }
-
-    setSelected([...selected, ingredient]);
+  const refs = {
+    [INGREDIENT_TYPES.BUN]: useRef(null),
+    [INGREDIENT_TYPES.MAIN]: useRef(null),
+    [INGREDIENT_TYPES.SAUCE]: useRef(null),
   };
 
   const onIngredientClick = (ingredient) => {
     setCurrentIngredient(ingredient);
-    setIngredientModalVisible(true);
-  };
-
-  const onIngredientDelete = (position) => {
-    const newSelected = [...selected];
-
-    const [deletedIngredient] = newSelected.splice(position, 1);
-    decreaseCounters(deletedIngredient);
-
-    setSelected(newSelected);
-  };
-
-  const decreaseCounters = (deletedIngredient) => {
-    const newCounters = new Map(counters);
-
-    if (newCounters.has(deletedIngredient._id)) {
-      const decreasedValue = newCounters.get(deletedIngredient._id) - 1;
-      newCounters.set(deletedIngredient._id, decreasedValue);
-    }
-
-    setCounters(newCounters);
-  };
-
-  const increaseCounter = (ingredient) => {
-    const newCounters = new Map(counters);
-
-    if (!newCounters.has(ingredient._id)) {
-      newCounters.set(ingredient._id, 0);
-    }
-    const newValue = newCounters.get(ingredient._id) + 1;
-    newCounters.set(ingredient._id, newValue);
-
-    setCounters(newCounters);
-  };
-
-  const setBuns = (ingredient) => {
-    if (!bottomBun) {
-      setBottomBun({ ...ingredient, name: `${ingredient.name} (низ)` });
-      return;
-    }
-
-    if (!topBun) {
-      setTopBun({ ...ingredient, name: `${ingredient.name} (верх)` });
-      return;
-    }
-  };
-
-  const hasBothBun = () => {
-    return topBun && bottomBun;
+    setIngredientVisible(true);
   };
 
   const handleOrderCloseModal = () => {
@@ -101,17 +50,18 @@ function App() {
   };
 
   const handleIngredientDetailsCloseModal = () => {
-    setIngredientModalVisible(false);
+    setIngredientVisible(false);
     setCurrentIngredient(null);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ingredientGroups = await getIngredients();
-        setIngredientGroups(ingredientGroups);
+        const ingredients = await getIngredients();
+        setIngredients(ingredients);
       } catch (error) {
         console.error(error);
+        setIngredients([]);
       }
     };
 
@@ -119,38 +69,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (ingredientGroups.length === 0) {
-      return;
-    }
-
-    const [buns, sauces, main] = ingredientGroups;
-    const bun = buns.items[0];
-    const middle = [...main.items.slice(0, 2), ...sauces.items.slice(0, 2)];
-    const _counters = [bun, bun, ...middle].reduce(
-      (state, current) => {
-        if (!state.has(current._id)) {
-          state.set(current._id, 0);
-        }
-        const count = state.get(current._id);
-        state.set(current._id, count + 1);
-        return state;
-      },
-      new Map()
-    );
+    const _counters = constructorState.selected.reduce((state, current) => {
+      if (!state.has(current._id)) {
+        state.set(current._id, 0);
+      }
+      const newValue =
+        current.type === INGREDIENT_TYPES.BUN ? 2 : state.get(current._id) + 1;
+      state.set(current._id, newValue);
+      return state;
+    }, new Map());
 
     setCounters(_counters);
-    setBuns(bun);
-    setBuns(bun);
-    setSelected([...middle]);
-  }, [ingredientGroups]);
+  }, [constructorState.selected]);
 
   const orderDetailModal = (
-    <Modal
-      title=""
-      onClose={handleOrderCloseModal}
-      isOpen={orderDetailsVisible}
-    >
-      <OrderDetails orderId="034536" />
+    <Modal onClose={handleOrderCloseModal} isOpen={orderDetailsVisible}>
+      <OrderDetails />
     </Modal>
   );
 
@@ -158,7 +92,7 @@ function App() {
     <Modal
       title="Детали ингредиента"
       onClose={handleIngredientDetailsCloseModal}
-      isOpen={ingredientModalVisible}
+      isOpen={ingredientVisible}
     >
       {currentIngredient && (
         <IngredientDetails ingredient={currentIngredient} />
@@ -166,24 +100,37 @@ function App() {
     </Modal>
   );
 
+  const onTabClick = (tabName) => setCurrentTab(tabName);
+
+  useEffect(() => {
+    try {
+      refs[currentTab]?.current.scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+      alert("Что-то пошло не так...");
+    }
+  }, [currentTab]);
+
   return (
     <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
-        <BurgerIngredients
-          onIngredientClick={onIngredientClick}
-          counters={counters}
-          ingredientGroups={ingredientGroups}
-        />
-        <BurgerConstructor
-          selectedIngredients={selected}
-          onIngredientDelete={onIngredientDelete}
-          top={topBun}
-          bottom={bottomBun}
-          onOrderCreateClick={handleOrderOpenModal}
-        />
-        {orderDetailsVisible && orderDetailModal}
-        {ingredientModalVisible && ingredientDetailsModal}
+        <IngredientsContext.Provider value={ingredients}>
+          <BurgerIngredients
+            onIngredientClick={onIngredientClick}
+            counters={counters}
+            onTabClick={onTabClick}
+            currentTab={currentTab}
+            groupRefs={refs}
+          />
+
+          <BurgerConstructorContext.Provider
+            value={[constructorState, setConstructorState]}
+          >
+            <BurgerConstructor onOrderCreateClick={handleOrderOpenModal} />
+            {orderDetailsVisible && orderDetailModal}
+          </BurgerConstructorContext.Provider>
+        </IngredientsContext.Provider>
+        {ingredientVisible && ingredientDetailsModal}
       </main>
     </>
   );

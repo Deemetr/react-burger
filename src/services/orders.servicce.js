@@ -1,7 +1,7 @@
-import { createOrder } from "./api/orders-api.service";
+import { postOrder } from "./api/orders-api.service";
 
-async function createOrder(_) {
-  /*Do mapping stuff*/
-
-  return createOrder(_);
+async function createOrder(ingredients) {
+  return postOrder({ ingredients });
 }
+
+export { createOrder };
