@@ -1,4 +1,5 @@
 import { API_BASE_PATH } from "../../constants";
+import { checkResponse } from "../../utils";
 
 async function postOrder(payload) {
   return fetch(`${API_BASE_PATH}/orders`, {
@@ -7,9 +8,7 @@ async function postOrder(payload) {
       "Content-Type": "application/json;charset=utf-8",
     },
     body: JSON.stringify(payload),
-  }).then((response) =>
-    response.ok ? response.json() : Promise.reject(`Ошибка ${response.status}`)
-  );
+  }).then(checkResponse);
 }
 
 export { postOrder };
