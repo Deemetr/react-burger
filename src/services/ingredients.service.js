@@ -15,9 +15,9 @@ async function getIngredients() {
   );
 
   return [
-    { title: "Булки", items: buns },
-    { title: "Соусы", items: sauces },
-    { title: "Начинка", items: main },
+    { title: "Булки", items: buns, type: INGREDIENT_TYPES.BUN },
+    { title: "Соусы", items: sauces, type: INGREDIENT_TYPES.SAUCE },
+    { title: "Начинка", items: main, type: INGREDIENT_TYPES.MAIN },
   ];
 }
 

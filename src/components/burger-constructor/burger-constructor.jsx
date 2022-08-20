@@ -64,7 +64,7 @@ function BurgerConstructor(props) {
       setState({ ...state, orderId: response.order.number });
       props.onOrderCreateClick();
     } catch (error) {
-      console.log("Что-то пошло не так....", error);
+      alert(error);
     }
   };
 

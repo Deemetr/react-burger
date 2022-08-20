@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
@@ -28,6 +28,14 @@ function App() {
   const [ingredientVisible, setIngredientVisible] = React.useState(false);
 
   const [currentIngredient, setCurrentIngredient] = React.useState(null);
+
+  const [currentTab, setCurrentTab] = React.useState("bread");
+
+  const refs = {
+    [INGREDIENT_TYPES.BUN]: useRef(null),
+    [INGREDIENT_TYPES.MAIN]: useRef(null),
+    [INGREDIENT_TYPES.SAUCE]: useRef(null),
+  };
 
   const onIngredientClick = (ingredient) => {
     setCurrentIngredient(ingredient);
@@ -92,6 +100,16 @@ function App() {
     </Modal>
   );
 
+  const onTabClick = (tabName) => setCurrentTab(tabName);
+
+  useEffect(() => {
+    try {
+      refs[currentTab]?.current.scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+      alert("Что-то пошло не так...");
+    }
+  }, [currentTab]);
+
   return (
     <>
       <AppHeader />
@@ -100,6 +118,9 @@ function App() {
           <BurgerIngredients
             onIngredientClick={onIngredientClick}
             counters={counters}
+            onTabClick={onTabClick}
+            currentTab={currentTab}
+            groupRefs={refs}
           />
 
           <BurgerConstructorContext.Provider

@@ -13,10 +13,12 @@ import { IngredientsContext } from "../../contexts/ingredients.context";
 function BurgerIngredients(props) {
   const ingredients = useContext(IngredientsContext);
 
+  const { onTabClick, currentTab, groupRefs, ...other } = props;
+
   return (
     <div className={getClassName(style["burger-ingredients-wrapper"], "mt-10")}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-      <TabContainer />
+      <TabContainer onTabClick={onTabClick} currentTab={currentTab} />
 
       <div className={style.groups}>
         {ingredients.map((group) => (
@@ -24,7 +26,8 @@ function BurgerIngredients(props) {
             title={group.title}
             ingredients={group.items}
             key={group.title}
-            {...props}
+            groupRef={props.groupRefs[group.type]}
+            {...other}
           />
         ))}
       </div>
@@ -35,6 +38,8 @@ function BurgerIngredients(props) {
 BurgerIngredients.propTypes = {
   counters: PropTypes.instanceOf(Map),
   onIngredientClick: PropTypes.func.isRequired,
+  onTabClick: PropTypes.func.isRequired,
+  groupRefs: PropTypes.object.isRequired,
 };
 
 export default BurgerIngredients;
