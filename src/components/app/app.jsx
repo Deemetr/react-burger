@@ -108,6 +108,7 @@ function App() {
     } catch (error) {
       alert("Что-то пошло не так...");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
   return (
