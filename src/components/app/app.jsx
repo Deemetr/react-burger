@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from "react";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import AppHeader from "../app-header/app-header";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
@@ -27,6 +30,8 @@ function App() {
   const [ingredientVisible, setIngredientVisible] = React.useState(false);
 
   const [currentTab, setCurrentTab] = React.useState("bread");
+
+  const [draggedElements, setDraggedElements] = React.useState([]);
 
   const refs = {
     [INGREDIENT_TYPES.BUN]: useRef(null),
@@ -82,18 +87,23 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
 
+  const dragHandle = (id) => {};
+
   return (
     <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
-        <BurgerIngredients
-          onIngredientClick={onIngredientClick}
-          onTabClick={onTabClick}
-          currentTab={currentTab}
-          groupRefs={refs}
-        />
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients
+            onIngredientClick={onIngredientClick}
+            onTabClick={onTabClick}
+            currentTab={currentTab}
+            groupRefs={refs}
+          />
 
-        <BurgerConstructor onOrderCreateClick={handleOrderOpenModal} />
+          <BurgerConstructor onOrderCreateClick={handleOrderOpenModal} />
+        </DndProvider>
+
         {orderDetailsVisible && orderDetailModal}
         {ingredientVisible && ingredientDetailsModal}
       </main>

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
+import { useDrop, useDrag } from "react-dnd";
 
 import {
   ConstructorElement,
@@ -13,51 +14,96 @@ import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
 
 import { createOrderThunk } from "../../services/reducers/orders-reducer";
+import {
+  addIngredient,
+  removeIngredient,
+} from "../../services/reducers/ingredients-reducer";
 
 import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
-  const selected = useSelector((store) => store.ingredients.selectedItems);
-  const bun = useSelector((store) => store.ingredients.selectedBun);
+  const {
+    items: ingredients,
+    selectedItems,
+    selectedBun: bun,
+  } = useSelector((store) => store.ingredients);
   const dispatch = useDispatch();
 
-  const handlerCreateOrderClick = async () => {
-    if (!selected || selected.length === 0) {
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(payload) {
+      onDropHandler(payload);
+    },
+  });
+
+  const [{ isDrag }, draggableIngredient] = useDrag({
+    type: "ingredient1",
+    item: { ingredient },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  const onDropHandler = ({ ingredient }) => {
+    if (!ingredient) {
       return;
     }
 
-    dispatch(createOrderThunk(selected.map((item) => item._id)));
+    if (ingredient.type === INGREDIENT_TYPES.BUN) {
+      dispatch(ingredient);
+    }
+
+    dispatch(addIngredient(ingredient));
+  };
+
+  const handlerCreateOrderClick = async () => {
+    if (!selectedItems || selectedItems.length === 0) {
+      return;
+    }
+
+    const orderContent = selectedItems.map((item) => item._id);
+
+    if (bun) {
+      orderContent.push(bun._id);
+    }
+
+    dispatch(createOrderThunk(orderContent));
     props.onOrderCreateClick();
   };
 
+  const onIngredientDelete = (index) => {
+    dispatch(removeIngredient(index));
+  };
+
   const totalPrice = useMemo(() => {
-    return selected.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.type === INGREDIENT_TYPES.BUN ? curr.price * 2 : curr.price),
-      0
+    return selectedItems.reduce(
+      (acc, curr) => acc + curr.price,
+      bun?.price * 2 || 0
     );
-  }, [selected]);
+  }, [selectedItems, bun]);
 
   const selectedIngredients = useMemo(() => {
-    return selected
+    return selectedItems
       .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
       .map((item, index) => (
-        <div className={style.position} key={item.name}>
+        <div className={style.position} key={index} draggable ref={draggableIngredient}>
           <DragIcon type="primary" />
           <ConstructorElement
-            isLocked={item.type === INGREDIENT_TYPES.BUN}
+            isLocked={false}
             text={item.name}
             price={item.price}
             thumbnail={item.image}
-            handleClose={() => props.onIngredientDelete(index)}
+            handleClose={() => onIngredientDelete(index)}
           />
         </div>
       ));
-  }, [selected, props]);
+  }, [selectedItems, props]);
 
   return (
-    <div className={getClassName(style["burger-constructor"], "mt-25")}>
+    <div
+      className={getClassName(style["burger-constructor"], "mt-25")}
+      ref={dropTarget}
+    >
       <div className={style.position}>
         {bun && (
           <ConstructorElement
