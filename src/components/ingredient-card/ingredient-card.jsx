@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 
 import {
   CurrencyIcon,
@@ -8,21 +9,22 @@ import {
 
 import { getClassName } from "../../utils";
 
+import { setCurrentIngredient } from "../../services/reducers/ingredients-reducer";
+
 import style from "./ingredient-card.module.css";
 
 function IngredientCard(props) {
   const { ingredient } = props;
+
+  const dispatch = useDispatch();
 
   if (!ingredient) {
     return;
   }
 
   const handleClick = (ingredient) => {
-    if (!props.onClick) {
-      return;
-    }
-
-    props.onClick(ingredient);
+    dispatch(setCurrentIngredient(ingredient));
+    props.onClick();
   };
 
   return (

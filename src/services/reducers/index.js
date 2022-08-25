@@ -1,18 +1,7 @@
-import { createStore } from "redux";
-import { combineReducers } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./root-reducer";
 
-import { enhancer } from '../redux-browser-middleware';
-
-const initialState = {
-  nothing: "nothing",
-};
-
-const nothingReducer = (state, action) => {
-  return initialState;
-};
-
-const rootReducer = combineReducers({
-  nothingReducer,
+export const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== "production",
 });
-
-export const store = createStore(rootReducer, enhancer);

@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
   ConstructorElement,
@@ -11,74 +12,35 @@ import {
 import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
 
-import { BurgerConstructorContext } from "../../contexts/burger-constructor.context";
-import { IngredientsContext } from "../../contexts/ingredients.context";
-
-import { createOrder } from "../../services";
+import { createOrderThunk } from "../../services/reducers/orders-reducer";
 
 import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
-  const [state, setState] = useContext(BurgerConstructorContext);
-  const ingredients = useContext(IngredientsContext);
-
-  const [topBun, setTopBun] = React.useState(null);
-  const [bottomBun, setBottomBun] = React.useState(null);
-
-  useEffect(() => {
-    const bun = state.selected.find(
-      (item) => item.type === INGREDIENT_TYPES.BUN
-    );
-    setBuns(bun);
-  }, [state.selected]);
-
-  useEffect(() => {
-    if (ingredients.length === 0) {
-      return;
-    }
-
-    const [buns, sauces, main] = ingredients;
-    const middle = [...main.items.slice(0, 2), ...sauces.items.slice(0, 2)];
-
-    setState({
-      ...state,
-      ...{ selected: [...middle, buns.items[0]] },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ingredients]);
-
-  const setBuns = (ingredient) => {
-    if (!ingredient) {
-      return;
-    }
-
-    setBottomBun({ ...ingredient, name: `${ingredient.name} (низ)` });
-    setTopBun({ ...ingredient, name: `${ingredient.name} (верх)` });
-  };
+  const selected = useSelector((store) => store.ingredients.selectedItems);
+  const bun = useSelector((store) => store.ingredients.selectedBun);
+  const dispatch = useDispatch();
 
   const handlerCreateOrderClick = async () => {
-    try {
-      const response = await createOrder(
-        state.selected.map((item) => item._id)
-      );
-      setState({ ...state, orderId: response.order.number });
-      props.onOrderCreateClick();
-    } catch (error) {
-      alert(error);
+    if (!selected || selected.length === 0) {
+      return;
     }
+
+    dispatch(createOrderThunk(selected.map((item) => item._id)));
+    props.onOrderCreateClick();
   };
 
   const totalPrice = useMemo(() => {
-    return state.selected.reduce(
+    return selected.reduce(
       (acc, curr) =>
         acc +
         (curr.type === INGREDIENT_TYPES.BUN ? curr.price * 2 : curr.price),
       0
     );
-  }, [state.selected]);
+  }, [selected]);
 
   const selectedIngredients = useMemo(() => {
-    return state.selected
+    return selected
       .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
       .map((item, index) => (
         <div className={style.position} key={item.name}>
@@ -92,30 +54,30 @@ function BurgerConstructor(props) {
           />
         </div>
       ));
-  }, [state.selected, props]);
+  }, [selected, props]);
 
   return (
     <div className={getClassName(style["burger-constructor"], "mt-25")}>
       <div className={style.position}>
-        {topBun && (
+        {bun && (
           <ConstructorElement
             type="top"
             isLocked="true"
-            text={topBun.name}
-            price={topBun.price}
-            thumbnail={topBun.image}
+            text={`${bun.name} (верх)`}
+            price={bun.price}
+            thumbnail={bun.image}
           />
         )}
       </div>
       <div className={style.middle}>{selectedIngredients}</div>
       <div className={style.position}>
-        {bottomBun && (
+        {bun && (
           <ConstructorElement
             type="bottom"
             isLocked="true"
-            text={bottomBun.name}
-            price={bottomBun.price}
-            thumbnail={bottomBun.image}
+            text={`${bun.name} (низ)`}
+            price={bun.price}
+            thumbnail={bun.image}
             className={style.position}
           />
         )}

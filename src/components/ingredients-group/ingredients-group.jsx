@@ -14,7 +14,7 @@ function IngredientsGroup(props) {
             key={item._id}
             ingredient={item}
             onClick={props.onIngredientClick}
-            count={props.counters.get(item._id) || 0}
+            count={0}
           />
         ))}
       </div>
@@ -23,10 +23,9 @@ function IngredientsGroup(props) {
 }
 
 IngredientsGroup.propTypes = {
-  counters: PropTypes.instanceOf(Map),
   onIngredientClick: PropTypes.func.isRequired,
   ingredients: PropTypes.array.isRequired,
-  groupRef: PropTypes.object
+  groupRef: PropTypes.object,
 };
 
 export default IngredientsGroup;

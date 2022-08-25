@@ -1,17 +1,14 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import TabContainer from "../tab-container/tab-container";
 import IngredientsGroup from "../ingredients-group/ingredients-group";
 import { getClassName } from "../../utils";
 
-import { useContext } from "react";
-
 import style from "./burger-ingredients.module.css";
 
-import { IngredientsContext } from "../../contexts/ingredients.context";
-
 function BurgerIngredients(props) {
-  const ingredients = useContext(IngredientsContext);
+  const ingredients = useSelector((state) => state.ingredients.items);
 
   const { onTabClick, currentTab, groupRefs, ...other } = props;
 
@@ -21,7 +18,7 @@ function BurgerIngredients(props) {
       <TabContainer onTabClick={onTabClick} currentTab={currentTab} />
 
       <div className={style.groups}>
-        {ingredients.map((group) => (
+        {ingredients?.map((group) => (
           <IngredientsGroup
             title={group.title}
             ingredients={group.items}
@@ -36,7 +33,6 @@ function BurgerIngredients(props) {
 }
 
 BurgerIngredients.propTypes = {
-  counters: PropTypes.instanceOf(Map),
   onIngredientClick: PropTypes.func.isRequired,
   onTabClick: PropTypes.func.isRequired,
   groupRefs: PropTypes.object.isRequired,

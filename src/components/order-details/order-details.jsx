@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 
 import style from "./order-details.module.css";
 import { getClassName } from "../../utils/";
@@ -7,10 +7,9 @@ import acepted1x from "../../images/acepted.png";
 import acepted2x from "../../images/acepted@2x.png";
 import acepted3x from "../../images/acepted@3x.png";
 
-import { BurgerConstructorContext } from "../../contexts/burger-constructor.context";
-
 function OrderDetails() {
-  const [state] = useContext(BurgerConstructorContext);
+  const orderId = useSelector((store) => store.orders.orderId);
+
   return (
     <div className={style["order-details"]}>
       <p
@@ -19,7 +18,7 @@ function OrderDetails() {
           "text text_type_digits-large"
         )}
       >
-        {state.orderId}
+        {orderId}
       </p>
       <p className="text text_type_main-medium mt-8 mb-15">
         идентификатор заказа

@@ -1,11 +1,15 @@
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import style from "./ingredient-details.module.css";
 
 import { getClassName } from "../../utils";
 
 function IngredientDetails(props) {
-  if (!props.ingredient) {
+  const ingredient = useSelector(
+    (store) => store.ingredients.currentIngredient
+  );
+
+  if (!ingredient) {
     return;
   }
 
@@ -14,26 +18,24 @@ function IngredientDetails(props) {
       <picture className={style.picture}>
         <source
           media="(max-width: 480px)"
-          srcSet={props.ingredient.image_mobile}
-          alt={`${props.ingredient.name}.`}
+          srcSet={ingredient.image_mobile}
+          alt={`${ingredient.name}.`}
         />
         <source
           media="(max-width: 1024px)"
-          srcSet={props.ingredient.image_large}
-          alt={`${props.ingredient.name}.`}
+          srcSet={ingredient.image_large}
+          alt={`${ingredient.name}.`}
         />
-        <img src={props.ingredient.image} alt={`${props.ingredient.name}.`}></img>
+        <img src={ingredient.image} alt={`${ingredient.name}.`}></img>
       </picture>
-      <p className="text text_type_main-medium mt-4  mb-8">
-        {props.ingredient.name}
-      </p>
+      <p className="text text_type_main-medium mt-4  mb-8">{ingredient.name}</p>
       <div className={getClassName(style.stats, "mb-15")}>
         <div className={style["stats-item"]}>
           <h5 className="text text_type_main-default text_color_inactive">
             Калории,ккал
           </h5>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.ingredient.calories}
+            {ingredient.calories}
           </p>
         </div>
         <div className={style["stats-item"]}>
@@ -41,7 +43,7 @@ function IngredientDetails(props) {
             Белки, г
           </h5>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.ingredient.proteins}
+            {ingredient.proteins}
           </p>
         </div>
         <div className={style["stats-item"]}>
@@ -49,7 +51,7 @@ function IngredientDetails(props) {
             Жиры, г
           </h5>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.ingredient.fat}
+            {ingredient.fat}
           </p>
         </div>
         <div className={style["stats-item"]}>
@@ -57,16 +59,12 @@ function IngredientDetails(props) {
             Углеводы, г
           </h5>
           <p className="text text_type_digits-default text_color_inactive">
-            {props.ingredient.carbohydrates}
+            {ingredient.carbohydrates}
           </p>
         </div>
       </div>
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  ingredient: PropTypes.object.isRequired,
-};
 
 export default IngredientDetails;
