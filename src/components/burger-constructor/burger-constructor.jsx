@@ -1,32 +1,25 @@
 import { useMemo } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
-import { useDrop, useDrag } from "react-dnd";
+import { useDrop } from "react-dnd";
 
 import {
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
-
+import BurgerConstructorItem from "../burger-constructor-item/burger-constructor-item";
 import { createOrderThunk } from "../../services/reducers/orders-reducer";
-import {
-  addIngredient,
-  removeIngredient,
-} from "../../services/reducers/ingredients-reducer";
+import { addIngredient } from "../../services/reducers/ingredients-reducer";
 
 import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
-  const {
-    items: ingredients,
-    selectedItems,
-    selectedBun: bun,
-  } = useSelector((store) => store.ingredients);
+  const { selectedItems, selectedBun: bun } = useSelector(
+    (store) => store.ingredients
+  );
   const dispatch = useDispatch();
 
   const [, dropTarget] = useDrop({
@@ -35,14 +28,6 @@ function BurgerConstructor(props) {
       onDropHandler(payload);
     },
   });
-
-  // const [{ isDrag }, draggableIngredient] = useDrag({
-  //   type: "ingredient1",
-  //   item: { ingredient },
-  //   collect: (monitor) => ({
-  //     isDrag: monitor.isDragging(),
-  //   }),
-  // });
 
   const onDropHandler = ({ ingredient }) => {
     if (!ingredient) {
@@ -67,10 +52,6 @@ function BurgerConstructor(props) {
     props.onOrderCreateClick();
   };
 
-  const onIngredientDelete = (index) => {
-    dispatch(removeIngredient(index));
-  };
-
   const totalPrice = useMemo(() => {
     return selectedItems.reduce(
       (acc, curr) => acc + curr.price,
@@ -79,21 +60,10 @@ function BurgerConstructor(props) {
   }, [selectedItems, bun]);
 
   const selectedIngredients = useMemo(() => {
-    return selectedItems
-      .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
-      .map((item, index) => (
-        <div className={style.position} key={index} draggable >
-          <DragIcon type="primary" />
-          <ConstructorElement
-            isLocked={false}
-            text={item.name}
-            price={item.price}
-            thumbnail={item.image}
-            handleClose={() => onIngredientDelete(index)}
-          />
-        </div>
-      ));
-  }, [selectedItems, props]);
+    return selectedItems.map((item, index) => (
+      <BurgerConstructorItem ingredient={item} index={index} key={index} />
+    ));
+  }, [selectedItems]);
 
   return (
     <div

@@ -21,20 +21,9 @@ function BurgerIngredients(props) {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (!groupsContainer.current || !tabsContainer) {
-      return;
-    }
-
-    groupsContainer.current.addEventListener("scroll", handleScroll);
-
-    return () => {
-      groupsContainer?.current?.removeEventListener("scroll", handleScroll);
-    };
-  }, [groupsContainer, tabsContainer]);
-
   const handleScroll = (event) => {
-    console.log(event);
+    event.preventDefault();
+    event.stopPropagation();
     
     const buns = props.groupRefs[INGREDIENT_TYPES.BUN];
     const main = props.groupRefs[INGREDIENT_TYPES.MAIN];
@@ -62,13 +51,24 @@ function BurgerIngredients(props) {
     dispatch(setCurrentTab(closest.type));
   };
 
+  useEffect(() => {
+    const container = groupsContainer.current;
+
+    if (!container || !tabsContainer) {
+      return;
+    }
+
+    container.addEventListener("scroll", handleScroll);
+
+    return () => {
+      container?.removeEventListener("scroll", handleScroll);
+    };
+  }, [groupsContainer, tabsContainer, handleScroll]);
+
   return (
     <div className={getClassName(style["burger-ingredients-wrapper"], "mt-10")}>
       <h2 className="text text_type_main-large mb-5">Соберите бургер</h2>
-      <TabContainer
-        onTabClick={onTabClick}
-        tabsRef={tabsContainer}
-      />
+      <TabContainer onTabClick={onTabClick} tabsRef={tabsContainer} />
 
       <div className={style.groups} ref={groupsContainer}>
         {ingredients?.map((group) => (

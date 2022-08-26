@@ -24,14 +24,11 @@ import {
 function App() {
   const dispatch = useDispatch();
 
-  const [counters, setCounters] = React.useState(new Map());
-
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
   const [ingredientVisible, setIngredientVisible] = React.useState(false);
 
   const currentTab = useSelector((store) => store.tabs.currentTab);
 
-  const [draggedElements, setDraggedElements] = React.useState([]);
 
   const refs = {
     [INGREDIENT_TYPES.BUN]: useRef(null),
@@ -88,8 +85,6 @@ function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTab]);
-
-  const dragHandle = (id) => {};
 
   return (
     <>

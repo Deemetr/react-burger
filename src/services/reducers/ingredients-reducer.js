@@ -41,6 +41,16 @@ const ingredientsSlice = createSlice({
     setCurrentIngredient(state, action) {
       state.currentIngredient = action.payload;
     },
+    moveIngredient(state, action) {
+      const { dragIndex, hoverIndex } = action.payload;
+      
+      const dragIngredient = state.selectedItems[dragIndex];
+      const newSelected = [...state.selectedItems];
+      newSelected.splice(dragIndex, 1);
+      newSelected.splice(hoverIndex, 0, dragIngredient)
+
+      state.selectedItems = newSelected;
+    },
   },
   extraReducers: {
     [fetchIngredients.fulfilled]: (state, action) => {
@@ -50,5 +60,9 @@ const ingredientsSlice = createSlice({
 });
 
 export default ingredientsSlice.reducer;
-export const { addIngredient, removeIngredient, setCurrentIngredient } =
-  ingredientsSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  setCurrentIngredient,
+  moveIngredient,
+} = ingredientsSlice.actions;
