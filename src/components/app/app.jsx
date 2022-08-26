@@ -9,7 +9,7 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import IngredientDetails from "../ingredient-details/ingredient-details";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
@@ -29,7 +29,7 @@ function App() {
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
   const [ingredientVisible, setIngredientVisible] = React.useState(false);
 
-  const [currentTab, setCurrentTab] = React.useState("bread");
+  const currentTab = useSelector((store) => store.tabs.currentTab);
 
   const [draggedElements, setDraggedElements] = React.useState([]);
 
@@ -76,11 +76,13 @@ function App() {
     </Modal>
   );
 
-  const onTabClick = (tabName) => setCurrentTab(tabName);
-
   useEffect(() => {
     try {
-      refs[currentTab]?.current.scrollIntoView({ behavior: "smooth" });
+      if(!currentTab) {
+        return;
+      }
+
+      refs[currentTab]?.current?.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       alert("Что-то пошло не так...");
     }
@@ -96,8 +98,6 @@ function App() {
         <DndProvider backend={HTML5Backend}>
           <BurgerIngredients
             onIngredientClick={onIngredientClick}
-            onTabClick={onTabClick}
-            currentTab={currentTab}
             groupRefs={refs}
           />
 
