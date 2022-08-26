@@ -8,7 +8,7 @@ import acepted2x from "../../images/acepted@2x.png";
 import acepted3x from "../../images/acepted@3x.png";
 
 function OrderDetails() {
-  const orderId = useSelector((store) => store.orders.orderId);
+  const { number } = useSelector((store) => store.orders.currentOrder);
 
   return (
     <div className={style["order-details"]}>
@@ -18,7 +18,7 @@ function OrderDetails() {
           "text text_type_digits-large"
         )}
       >
-        {orderId}
+        {number}
       </p>
       <p className="text text_type_main-medium mt-8 mb-15">
         идентификатор заказа

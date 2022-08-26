@@ -36,21 +36,17 @@ function BurgerConstructor(props) {
     },
   });
 
-  const [{ isDrag }, draggableIngredient] = useDrag({
-    type: "ingredient1",
-    item: { ingredient },
-    collect: (monitor) => ({
-      isDrag: monitor.isDragging(),
-    }),
-  });
+  // const [{ isDrag }, draggableIngredient] = useDrag({
+  //   type: "ingredient1",
+  //   item: { ingredient },
+  //   collect: (monitor) => ({
+  //     isDrag: monitor.isDragging(),
+  //   }),
+  // });
 
   const onDropHandler = ({ ingredient }) => {
     if (!ingredient) {
       return;
-    }
-
-    if (ingredient.type === INGREDIENT_TYPES.BUN) {
-      dispatch(ingredient);
     }
 
     dispatch(addIngredient(ingredient));
@@ -86,7 +82,7 @@ function BurgerConstructor(props) {
     return selectedItems
       .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
       .map((item, index) => (
-        <div className={style.position} key={index} draggable ref={draggableIngredient}>
+        <div className={style.position} key={index} draggable >
           <DragIcon type="primary" />
           <ConstructorElement
             isLocked={false}

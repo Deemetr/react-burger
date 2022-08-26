@@ -1,9 +1,9 @@
 import { postOrder } from "./api/orders-api.service";
 
 async function createOrder(ingredients) {
-  const response = await postOrder({ ingredients });
+  const { order, name } = await postOrder({ ingredients });
 
-  return response?.order?.number;
+  return { ...order, name };
 }
 
 export { createOrder };

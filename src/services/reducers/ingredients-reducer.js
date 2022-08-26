@@ -14,18 +14,28 @@ const ingredientsSlice = createSlice({
     selectedItems: [],
     currentIngredient: null,
     selectedBun: null,
-    dragged
+    counters: {},
   },
   reducers: {
     addIngredient(state, action) {
-      if (action.payload.type === INGREDIENT_TYPES.BUN) {
-        state.selectedBun = action.payload;
+      const ingredient = action.payload;
+
+      if (ingredient.type === INGREDIENT_TYPES.BUN) {
+        state.counters[state.selectedBun?._id] = 0;
+        state.counters[ingredient._id] = 2;
+        state.selectedBun = ingredient;
         return;
       }
 
+      if (!state.counters[ingredient._id]) {
+        state.counters[ingredient._id] = 0;
+      }
+      state.counters[ingredient._id] += 1;
       state.selectedItems.push(action.payload);
     },
     removeIngredient(state, action) {
+      const deletedIngredient = state.selectedItems[action.payload];
+      state.counters[deletedIngredient._id] -= 1;
       state.selectedItems.splice(action.payload, 1);
     },
     setCurrentIngredient(state, action) {

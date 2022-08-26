@@ -1,10 +1,15 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 import IngredientCard from "../ingredient-card/ingredient-card";
 
 import style from "./ingredients-group.module.css";
 
+
+
 function IngredientsGroup(props) {
+  const counters = useSelector((store) => store.ingredients.counters);
+
   return (
     <div className="mb-10 mt-10" ref={props.groupRef}>
       <h3 className="text text_type_main-medium mb-6">{props.title}</h3>
@@ -14,7 +19,7 @@ function IngredientsGroup(props) {
             key={item._id}
             ingredient={item}
             onClick={props.onIngredientClick}
-            count={0}
+            count={counters[item._id] || 0}
           />
         ))}
       </div>

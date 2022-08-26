@@ -10,12 +10,15 @@ export const createOrderThunk = createAsyncThunk(
 const ordersSlice = createSlice({
   name: "orders",
   initialState: {
-    orderId: "",
+    currentOrder: {
+      name: '',
+      number: null
+    },
   },
   reducers: {},
   extraReducers: {
     [createOrderThunk.fulfilled]: (state, action) => {
-      state.orderId = action.payload;
+      state.currentOrder = action.payload;
     },
   },
 });
