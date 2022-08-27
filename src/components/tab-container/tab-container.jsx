@@ -43,6 +43,4 @@ function TabContainer(props) {
   );
 }
 
-TabContainer.propTypes = {};
-
 export default TabContainer;
