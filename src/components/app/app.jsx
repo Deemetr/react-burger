@@ -37,7 +37,6 @@ function App() {
   };
 
   const onIngredientClick = () => {
-    debugger;
     setIngredientVisible(true);
   };
 
