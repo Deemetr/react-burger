@@ -65,8 +65,10 @@ export default function BurgerConstructorItem(props) {
 
   dragRef(dropRef(ref));
 
+  const opacity = isDragging ? 0 : 1;
+
   return (
-    <div className={style.position} draggable ref={ref}>
+    <div style={{ opacity }} className={style.position} draggable ref={ref}>
       <DragIcon type="primary" />
       <ConstructorElement
         isLocked={false}

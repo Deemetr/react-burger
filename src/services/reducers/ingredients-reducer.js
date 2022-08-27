@@ -1,4 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import { v4 as uuidv4 } from "uuid";
+
 import { INGREDIENT_TYPES } from "../../constants";
 import { getIngredients } from "../ingredients.service";
 
@@ -31,7 +34,7 @@ const ingredientsSlice = createSlice({
         state.counters[ingredient._id] = 0;
       }
       state.counters[ingredient._id] += 1;
-      state.selectedItems.push(action.payload);
+      state.selectedItems.push({ ...action.payload, uuid: uuidv4() });
     },
     removeIngredient(state, action) {
       const deletedIngredient = state.selectedItems[action.payload];
@@ -43,11 +46,11 @@ const ingredientsSlice = createSlice({
     },
     moveIngredient(state, action) {
       const { dragIndex, hoverIndex } = action.payload;
-      
+
       const dragIngredient = state.selectedItems[dragIndex];
       const newSelected = [...state.selectedItems];
       newSelected.splice(dragIndex, 1);
-      newSelected.splice(hoverIndex, 0, dragIngredient)
+      newSelected.splice(hoverIndex, 0, dragIngredient);
 
       state.selectedItems = newSelected;
     },

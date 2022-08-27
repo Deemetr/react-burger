@@ -1,5 +1,3 @@
-import PropTypes from "prop-types";
-
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { INGREDIENT_TYPES } from "../../constants";
 

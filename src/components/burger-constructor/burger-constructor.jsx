@@ -61,7 +61,7 @@ function BurgerConstructor(props) {
 
   const selectedIngredients = useMemo(() => {
     return selectedItems.map((item, index) => (
-      <BurgerConstructorItem ingredient={item} index={index} key={index} />
+      <BurgerConstructorItem ingredient={item} index={index} key={item.uuid} />
     ));
   }, [selectedItems]);
 
