@@ -27,8 +27,6 @@ function App() {
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
   const [ingredientVisible, setIngredientVisible] = React.useState(false);
 
-  const currentTab = useSelector((store) => store.tabs.currentTab);
-
   const refs = {
     [INGREDIENT_TYPES.BUN]: useRef(null),
     [INGREDIENT_TYPES.MAIN]: useRef(null),
@@ -70,19 +68,6 @@ function App() {
       <IngredientDetails />
     </Modal>
   );
-
-  useEffect(() => {
-    try {
-      if (!currentTab) {
-        return;
-      }
-
-      refs[currentTab]?.current?.scrollIntoView({ behavior: "smooth" });
-    } catch (error) {
-      alert("Что-то пошло не так...");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTab]);
 
   return (
     <>
