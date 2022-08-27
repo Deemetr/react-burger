@@ -11,16 +11,24 @@ const ordersSlice = createSlice({
   name: "orders",
   initialState: {
     currentOrder: {
-      name: '',
-      number: null
+      name: "",
+      number: null,
     },
+    requestOrder: false
   },
-  reducers: {},
+  reducers: {
+    setRequestOrder(state, action) {
+      state.requestOrder = action.payload;
+    }
+  },
   extraReducers: {
     [createOrderThunk.fulfilled]: (state, action) => {
       state.currentOrder = action.payload;
+      state.requestOrder = false;
     },
   },
 });
 
 export default ordersSlice.reducer;
+export const { setRequestOrder } = ordersSlice.actions;
+export const setOrderObject = createOrderThunk.fulfilled;

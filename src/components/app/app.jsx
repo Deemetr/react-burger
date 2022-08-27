@@ -29,7 +29,6 @@ function App() {
 
   const currentTab = useSelector((store) => store.tabs.currentTab);
 
-
   const refs = {
     [INGREDIENT_TYPES.BUN]: useRef(null),
     [INGREDIENT_TYPES.MAIN]: useRef(null),
@@ -74,7 +73,7 @@ function App() {
 
   useEffect(() => {
     try {
-      if(!currentTab) {
+      if (!currentTab) {
         return;
       }
 

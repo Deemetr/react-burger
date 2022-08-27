@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 import { INGREDIENT_TYPES } from "../../constants";
 import { getIngredients } from "../ingredients.service";
 
+import { setOrderObject } from "./orders-reducer";
+
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
   getIngredients
@@ -58,6 +60,10 @@ const ingredientsSlice = createSlice({
   extraReducers: {
     [fetchIngredients.fulfilled]: (state, action) => {
       state.items = action.payload;
+    },
+    [setOrderObject]: (state, action) => {
+      state.selectedItems = [];
+      state.selectedBun = null;
     },
   },
 });

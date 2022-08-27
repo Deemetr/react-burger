@@ -7,10 +7,14 @@ import acepted1x from "../../images/acepted.png";
 import acepted2x from "../../images/acepted@2x.png";
 import acepted3x from "../../images/acepted@3x.png";
 
-function OrderDetails() {
-  const { number } = useSelector((store) => store.orders.currentOrder);
+import Loader from "../loader/loader";
 
-  return (
+function OrderDetails() {
+  const { currentOrder, requestOrder } = useSelector((store) => store.orders);
+
+  const content = requestOrder ? (
+    <Loader />
+  ) : (
     <div className={style["order-details"]}>
       <p
         className={getClassName(
@@ -18,7 +22,7 @@ function OrderDetails() {
           "text text_type_digits-large"
         )}
       >
-        {number}
+        {currentOrder.number}
       </p>
       <p className="text text_type_main-medium mt-8 mb-15">
         идентификатор заказа
@@ -37,6 +41,8 @@ function OrderDetails() {
       </p>
     </div>
   );
+
+  return <div className={style.wrapper}>{content}</div>;
 }
 
 export default OrderDetails;

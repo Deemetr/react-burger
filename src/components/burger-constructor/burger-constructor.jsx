@@ -11,7 +11,7 @@ import {
 
 import { getClassName } from "../../utils";
 import BurgerConstructorItem from "../burger-constructor-item/burger-constructor-item";
-import { createOrderThunk } from "../../services/reducers/orders-reducer";
+import { createOrderThunk, setRequestOrder } from "../../services/reducers/orders-reducer";
 import { addIngredient } from "../../services/reducers/ingredients-reducer";
 
 import style from "./burger-constructor.module.css";
@@ -48,6 +48,7 @@ function BurgerConstructor(props) {
       orderContent.push(bun._id);
     }
 
+    dispatch(setRequestOrder(true));
     dispatch(createOrderThunk(orderContent));
     props.onOrderCreateClick();
   };
