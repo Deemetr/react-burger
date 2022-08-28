@@ -1,121 +1,96 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
 
 import {
   ConstructorElement,
-  DragIcon,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { INGREDIENT_TYPES } from "../../constants";
 import { getClassName } from "../../utils";
-
-import { BurgerConstructorContext } from "../../contexts/burger-constructor.context";
-import { IngredientsContext } from "../../contexts/ingredients.context";
-
-import { createOrder } from "../../services";
+import BurgerConstructorItem from "../burger-constructor-item/burger-constructor-item";
+import { createOrderThunk, setRequestOrder } from "../../services/reducers/orders-reducer";
+import { addIngredient } from "../../services/reducers/ingredients-reducer";
 
 import style from "./burger-constructor.module.css";
 
 function BurgerConstructor(props) {
-  const [state, setState] = useContext(BurgerConstructorContext);
-  const ingredients = useContext(IngredientsContext);
+  const { selectedItems, selectedBun: bun } = useSelector(
+    (store) => store.ingredients
+  );
+  const dispatch = useDispatch();
 
-  const [topBun, setTopBun] = React.useState(null);
-  const [bottomBun, setBottomBun] = React.useState(null);
+  const [, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(payload) {
+      onDropHandler(payload);
+    },
+  });
 
-  useEffect(() => {
-    const bun = state.selected.find(
-      (item) => item.type === INGREDIENT_TYPES.BUN
-    );
-    setBuns(bun);
-  }, [state.selected]);
-
-  useEffect(() => {
-    if (ingredients.length === 0) {
-      return;
-    }
-
-    const [buns, sauces, main] = ingredients;
-    const middle = [...main.items.slice(0, 2), ...sauces.items.slice(0, 2)];
-
-    setState({
-      ...state,
-      ...{ selected: [...middle, buns.items[0]] },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ingredients]);
-
-  const setBuns = (ingredient) => {
+  const onDropHandler = ({ ingredient }) => {
     if (!ingredient) {
       return;
     }
 
-    setBottomBun({ ...ingredient, name: `${ingredient.name} (низ)` });
-    setTopBun({ ...ingredient, name: `${ingredient.name} (верх)` });
+    dispatch(addIngredient(ingredient));
   };
 
   const handlerCreateOrderClick = async () => {
-    try {
-      const response = await createOrder(
-        state.selected.map((item) => item._id)
-      );
-      setState({ ...state, orderId: response.order.number });
-      props.onOrderCreateClick();
-    } catch (error) {
-      alert(error);
+    if (!selectedItems || selectedItems.length === 0) {
+      return;
     }
+
+    const orderContent = selectedItems.map((item) => item._id);
+
+    if (bun) {
+      orderContent.push(bun._id);
+    }
+
+    dispatch(setRequestOrder(true));
+    dispatch(createOrderThunk(orderContent));
+    props.onOrderCreateClick();
   };
 
   const totalPrice = useMemo(() => {
-    return state.selected.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.type === INGREDIENT_TYPES.BUN ? curr.price * 2 : curr.price),
-      0
+    return selectedItems.reduce(
+      (acc, curr) => acc + curr.price,
+      bun?.price * 2 || 0
     );
-  }, [state.selected]);
+  }, [selectedItems, bun]);
 
   const selectedIngredients = useMemo(() => {
-    return state.selected
-      .filter((item) => item.type !== INGREDIENT_TYPES.BUN)
-      .map((item, index) => (
-        <div className={style.position} key={item.name}>
-          <DragIcon type="primary" />
-          <ConstructorElement
-            isLocked={item.type === INGREDIENT_TYPES.BUN}
-            text={item.name}
-            price={item.price}
-            thumbnail={item.image}
-            handleClose={() => props.onIngredientDelete(index)}
-          />
-        </div>
-      ));
-  }, [state.selected, props]);
+    return selectedItems.map((item, index) => (
+      <BurgerConstructorItem ingredient={item} index={index} key={item.uuid} />
+    ));
+  }, [selectedItems]);
 
   return (
-    <div className={getClassName(style["burger-constructor"], "mt-25")}>
+    <div
+      className={getClassName(style["burger-constructor"], "mt-25")}
+      ref={dropTarget}
+    >
       <div className={style.position}>
-        {topBun && (
+        {bun && (
           <ConstructorElement
             type="top"
             isLocked="true"
-            text={topBun.name}
-            price={topBun.price}
-            thumbnail={topBun.image}
+            text={`${bun.name} (верх)`}
+            price={bun.price}
+            thumbnail={bun.image}
           />
         )}
       </div>
       <div className={style.middle}>{selectedIngredients}</div>
       <div className={style.position}>
-        {bottomBun && (
+        {bun && (
           <ConstructorElement
             type="bottom"
             isLocked="true"
-            text={bottomBun.name}
-            price={bottomBun.price}
-            thumbnail={bottomBun.image}
+            text={`${bun.name} (низ)`}
+            price={bun.price}
+            thumbnail={bun.image}
             className={style.position}
           />
         )}

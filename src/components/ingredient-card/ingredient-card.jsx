@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useDrag } from "react-dnd";
+import { useDispatch } from "react-redux";
 
 import {
   CurrencyIcon,
@@ -8,27 +10,37 @@ import {
 
 import { getClassName } from "../../utils";
 
+import { setCurrentIngredient } from "../../services/reducers/ingredients-reducer";
+
 import style from "./ingredient-card.module.css";
 
 function IngredientCard(props) {
   const { ingredient } = props;
+
+  const [{ isDrag }, dragRef] = useDrag({
+    type: "ingredient",
+    item: { ingredient },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  const dispatch = useDispatch();
 
   if (!ingredient) {
     return;
   }
 
   const handleClick = (ingredient) => {
-    if (!props.onClick) {
-      return;
-    }
-
-    props.onClick(ingredient);
+    dispatch(setCurrentIngredient(ingredient));
+    props.onClick();
   };
 
   return (
     <div
-      className={style.ingredient}
+      className={getClassName(style.ingredient, ...[isDrag && style.dragging])}
       onClick={() => handleClick(ingredient)}
+      ref={dragRef}
     >
       <div className={style.counter}>
         <Counter count={props.count} size="default" />
