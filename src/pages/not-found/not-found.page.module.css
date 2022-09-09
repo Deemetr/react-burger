@@ -1,0 +1,15 @@
+.not-found-page {
+   display: flex;
+   flex-direction: column;
+   flex: 1 0 100%;
+
+   align-items: center;
+   justify-content: center;
+
+   
+   width: 100%;
+}
+
+.message {
+   font-size: 10rem;
+}

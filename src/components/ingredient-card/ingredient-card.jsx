@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { useDispatch } from "react-redux";
@@ -33,7 +32,6 @@ function IngredientCard(props) {
 
   const handleClick = (ingredient) => {
     dispatch(setCurrentIngredient(ingredient));
-    props.onClick();
   };
 
   return (
@@ -71,7 +69,6 @@ function IngredientCard(props) {
 
 IngredientCard.propTypes = {
   ingredient: PropTypes.object.isRequired,
-  onClick: PropTypes.func,
   count: PropTypes.number.isRequired,
 };
 

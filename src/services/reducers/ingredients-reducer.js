@@ -74,4 +74,5 @@ export const {
   removeIngredient,
   setCurrentIngredient,
   moveIngredient,
+  setCurrentIngredientById,
 } = ingredientsSlice.actions;

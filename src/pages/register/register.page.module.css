@@ -1,0 +1,27 @@
+.register-page {
+   display: flex;
+   flex-direction: column;
+
+   align-items: center;
+
+   width: 480px;
+   height: 478px;
+
+   margin: 0 auto;
+}
+
+.register-page__title {
+   margin: 0;
+}
+
+.register-button-wrapper {
+   width: 128px;
+}
+
+.register-page__login {
+   margin-top: auto;
+}
+
+.link {
+   color: #4C4CFF;
+}

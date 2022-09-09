@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 
 import TabContainer from "../tab-container/tab-container";
@@ -12,23 +11,30 @@ import { INGREDIENT_TYPES } from "../../constants";
 import { setCurrentTab } from "../../services/reducers/tabs-reducer";
 
 function BurgerIngredients(props) {
+  const refs = {
+    [INGREDIENT_TYPES.BUN]: useRef(null),
+    [INGREDIENT_TYPES.MAIN]: useRef(null),
+    [INGREDIENT_TYPES.SAUCE]: useRef(null),
+  };
+
   const ingredients = useSelector((state) => state.ingredients.items);
   const currentTab = useSelector((store) => store.tabs.currentTab);
 
-  const { onTabClick, groupRefs, ...other } = props;
+  const { onTabClick, ...other } = props;
 
   const groupsContainer = useRef(null);
   const tabsContainer = useRef(null);
 
   const dispatch = useDispatch();
 
+  // eslint-disable-next-line
   const handleScroll = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const buns = props.groupRefs[INGREDIENT_TYPES.BUN];
-    const main = props.groupRefs[INGREDIENT_TYPES.MAIN];
-    const sauces = props.groupRefs[INGREDIENT_TYPES.SAUCE];
+    const buns = refs[INGREDIENT_TYPES.BUN];
+    const main = refs[INGREDIENT_TYPES.MAIN];
+    const sauces = refs[INGREDIENT_TYPES.SAUCE];
 
     const { bottom: tabsBottom } =
       tabsContainer.current.getBoundingClientRect();
@@ -72,7 +78,7 @@ function BurgerIngredients(props) {
         return;
       }
 
-      groupRefs[currentTab]?.current?.scrollIntoView({ behavior: "smooth" });
+      refs[currentTab]?.current?.scrollIntoView({ behavior: "smooth" });
     } catch (error) {
       alert("Что-то пошло не так...");
     }
@@ -90,7 +96,7 @@ function BurgerIngredients(props) {
             title={group.title}
             ingredients={group.items}
             key={group.title}
-            groupRef={props.groupRefs[group.type]}
+            groupRef={refs[group.type]}
             {...other}
           />
         ))}
@@ -98,10 +104,5 @@ function BurgerIngredients(props) {
     </div>
   );
 }
-
-BurgerIngredients.propTypes = {
-  onIngredientClick: PropTypes.func.isRequired,
-  groupRefs: PropTypes.object.isRequired,
-};
 
 export default BurgerIngredients;

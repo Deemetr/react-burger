@@ -20,8 +20,19 @@ html *::-webkit-scrollbar-thumb {
   border: 3px solid #2f2f37;
 }
 
+#root {
+  height: 100%;
+}
 
 .content {
   max-width: 1280px;
   margin: 0 auto;
+}
+
+.input__container {
+  margin-top: 24px;
+}
+
+.link {
+  color: #4C4CFF;
 }
