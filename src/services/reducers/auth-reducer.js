@@ -7,6 +7,7 @@ import {
   getUser,
   requestPasswordReset,
   resetPassword,
+  updateUser,
 } from "../api/auth.api.service";
 
 import { setCookie, deleteCookie, getCookie } from "../../utils";
@@ -30,6 +31,7 @@ export const resetPasswordThunk = createAsyncThunk(
   "auth/resetPassword",
   resetPassword
 );
+export const updateUserThunk = createAsyncThunk("auth/updateUser", updateUser);
 
 const setUserData = (state, payload) => {
   state.loggedIn = true;
@@ -92,6 +94,8 @@ const authSlice = createSlice({
       state.resetLinkSent = false;
       state.passwordReset = true;
     },
+    [updateUserThunk.fulfilled]: (state, { payload }) =>
+      setUserData(state, payload),
   },
 });
 

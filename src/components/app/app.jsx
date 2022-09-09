@@ -1,9 +1,4 @@
-import {
-  Switch,
-  Route,
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 
@@ -47,24 +42,26 @@ function App() {
           <Route path="/" exact>
             <HomePage />
           </Route>
-          <Route path="/login" exact>
-            <Login />
-          </Route>
-          <Route path="/register" exact>
-            <RegisterPage />
-          </Route>
-          <Route path="/forgot-password">
-            <ForgotPasswordPage />
-          </Route>
-          <Route path="/reset-password">
-            <ResetPasswordPage />
-          </Route>
           <Route path="/ingredients/:id">
             <IngredientDetails />
           </Route>
+
+          <ProtectedRoute path="/login" exact onlyAnonimous={true}>
+            <Login />
+          </ProtectedRoute>
+          <ProtectedRoute path="/register" exact onlyAnonimous={true}>
+            <RegisterPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/forgot-password" onlyAnonimous={true}>
+            <ForgotPasswordPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/reset-password" onlyAnonimous={true}>
+            <ResetPasswordPage />
+          </ProtectedRoute>
           <ProtectedRoute path="/profile">
             <ProfilePage />
           </ProtectedRoute>
+          
           <Route>
             <NotFoundPage />
           </Route>

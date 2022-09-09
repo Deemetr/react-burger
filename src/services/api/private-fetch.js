@@ -1,5 +1,5 @@
 import { API_BASE_PATH } from "../../constants";
-import { checkResponse, setCookie } from "../../utils";
+import { checkResponse, setCookie, getCookie } from "../../utils";
 
 const saveTokens = (refreshToken, accessToken) => {
   setCookie("token", accessToken);
@@ -20,8 +20,14 @@ const refreshTokenRequest = async () => {
 
 const fetchWithRefresh = async (url, options) => {
   try {
-    debugger;
-    const response = await fetch(url, options);
+    const _options = {
+      ...options,
+      ...{
+        headers: { ...options["headers"], Authorization: getCookie("token") },
+      },
+    };
+
+    const response = await fetch(url, _options);
     return await checkResponse(response);
   } catch (err) {
     if (err.message === "jwt expired") {

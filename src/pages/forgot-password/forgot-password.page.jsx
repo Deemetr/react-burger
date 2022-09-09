@@ -13,21 +13,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { requestPasswordResetThunk } from "../../services/reducers/auth-reducer";
 
 export default function ForgotPasswordPage() {
-  const [ values, inputChange ] = useForm({
+  const [values, inputChange] = useForm({
     email: "",
   });
 
-  const { resetLinkSent, loggedIn } = useSelector((state) => state.auth);
+  const { resetLinkSent } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
   const requestResetLink = () => {
     dispatch(requestPasswordResetThunk(values["email"]));
   };
-
-  if (loggedIn) {
-    return <Redirect to="/" />;
-  }
 
   if (resetLinkSent) {
     return <Redirect to="/reset-password"></Redirect>;

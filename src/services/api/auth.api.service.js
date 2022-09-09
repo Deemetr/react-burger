@@ -67,8 +67,17 @@ export async function getUser() {
     method: "GET",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
-      Authorization: getCookie("token"),
     },
+  });
+}
+
+export async function updateUser(user) {
+  return privateFetch(`${API_BASE_PATH}/auth/user`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify(user),
   });
 }
 

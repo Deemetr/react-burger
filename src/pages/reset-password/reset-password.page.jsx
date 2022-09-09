@@ -14,17 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetPasswordThunk } from "../../services/reducers/auth-reducer";
 
 export default function ResetPasswordPage() {
-  const { passwordReset, loggedIn } = useSelector((state) => state.auth);
+  const { passwordReset } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const [values, inputChange] = useForm({
     token: "",
     password: "",
   });
-
-  if (loggedIn) {
-    return <Redirect to="/" />;
-  }
 
   if (passwordReset) {
     return <Redirect to="/login" />;

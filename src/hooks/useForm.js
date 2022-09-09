@@ -7,5 +7,5 @@ export function useForm(formValues) {
     const { value, name } = event.target;
     setValues({ ...values, [name]: value });
   };
-  return [values, inputChange];
+  return [values, inputChange, setValues];
 }

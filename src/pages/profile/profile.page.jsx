@@ -6,6 +6,7 @@ import {
   Input,
   EmailInput,
   PasswordInput,
+  Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { getClassName } from "../../utils";
@@ -14,6 +15,7 @@ import { useForm } from "../../hooks/useForm";
 import {
   getUserThunk,
   logoutThunk,
+  updateUserThunk,
 } from "../../services/reducers/auth-reducer";
 
 import styles from "./profile.page.module.css";
@@ -21,7 +23,7 @@ import styles from "./profile.page.module.css";
 export default function ProfilePage() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const [values, onChange] = useForm({
+  const [values, onChange, setValues] = useForm({
     name: user.name,
     login: user.email,
     password: user.password,
@@ -34,6 +36,13 @@ export default function ProfilePage() {
   useEffect(() => {
     dispatch(getUserThunk());
   }, [dispatch]);
+
+  const updateUserData = () => {
+    dispatch(updateUserThunk(values));
+  };
+  const resetUserData = () => {
+    setValues({ name: user.name, login: user.email, password: user.password });
+  };
 
   return (
     <div className={styles["profile-page"]}>
@@ -78,6 +87,15 @@ export default function ProfilePage() {
           value={values["password"]}
           name="password"
         />
+
+        <div className="d-flex mt-6">
+          <Button type="secondary" size="medium" onClick={resetUserData}>
+            Отмена
+          </Button>
+          <Button type="primary" size="medium" onClick={updateUserData}>
+            Сохранить
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -14,22 +14,19 @@ import styles from "./login.page.module.css";
 import { loginThunk } from "../../services/reducers/auth-reducer";
 
 export default function Login() {
-  const { loggedIn } = useSelector((state) => state.auth);
-  const { state } = useLocation();
-
   const [values, inputChange] = useForm({
     email: "",
     password: "",
   });
 
+  const { loggedIn } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const { state } = useLocation();
   const login = () => {
     dispatch(loginThunk({ ...values }));
   };
 
   if (loggedIn) {
-    debugger;
     return <Redirect to={state?.from || "/"} />;
   }
 
