@@ -1,90 +1,87 @@
-import React, { useEffect, useRef } from "react";
+import { Switch, Route, useLocation, useHistory } from "react-router-dom";
 
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDispatch } from "react-redux";
 
 import AppHeader from "../app-header/app-header";
-import BurgerConstructor from "../burger-constructor/burger-constructor";
-import BurgerIngredients from "../burger-ingredients/burger-ingredients";
-import Modal from "../modal/modal";
-import OrderDetails from "../order-details/order-details";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import { useDispatch, useSelector } from "react-redux";
-
-import { INGREDIENT_TYPES } from "../../constants";
+import { ProtectedRoute } from "../protected-route/protected-route";
 import { getClassName } from "../../utils";
+
+import {
+  HomePage,
+  NotFoundPage,
+  Login,
+  RegisterPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
+  ProfilePage,
+} from "../../pages/index";
+
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
+
+import { setCurrentIngredient } from "../../services/reducers/ingredients-reducer";
 
 import style from "./app.module.css";
 
-import {
-  fetchIngredients,
-  setCurrentIngredient,
-} from "../../services/reducers/ingredients-reducer";
-
 function App() {
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
-
-  const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
-  const [ingredientVisible, setIngredientVisible] = React.useState(false);
-
-  const refs = {
-    [INGREDIENT_TYPES.BUN]: useRef(null),
-    [INGREDIENT_TYPES.MAIN]: useRef(null),
-    [INGREDIENT_TYPES.SAUCE]: useRef(null),
-  };
-
-  const onIngredientClick = () => {
-    setIngredientVisible(true);
-  };
-
-  const handleOrderCloseModal = () => {
-    setOrderDetailsVisible(false);
-  };
-  const handleOrderOpenModal = () => {
-    setOrderDetailsVisible(true);
-  };
+  let background = location.state && location.state.background;
 
   const handleIngredientDetailsCloseModal = () => {
-    setIngredientVisible(false);
     dispatch(setCurrentIngredient(null));
+    history.goBack();
   };
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
-
-  const orderDetailModal = (
-    <Modal onClose={handleOrderCloseModal} isOpen={orderDetailsVisible}>
-      <OrderDetails />
-    </Modal>
-  );
-
-  const ingredientDetailsModal = (
-    <Modal
-      title="Детали ингредиента"
-      onClose={handleIngredientDetailsCloseModal}
-      isOpen={ingredientVisible}
-    >
-      <IngredientDetails />
-    </Modal>
-  );
 
   return (
     <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients
-            onIngredientClick={onIngredientClick}
-            groupRefs={refs}
-          />
+        <Switch location={background || location}>
+          <Route path="/" exact>
+            <HomePage />
+          </Route>
+          <Route path="/ingredients/:id">
+            <IngredientDetails />
+          </Route>
 
-          <BurgerConstructor onOrderCreateClick={handleOrderOpenModal} />
-        </DndProvider>
-
-        {orderDetailsVisible && orderDetailModal}
-        {ingredientVisible && ingredientDetailsModal}
+          <ProtectedRoute path="/login" exact onlyAnonimous={true}>
+            <Login />
+          </ProtectedRoute>
+          <ProtectedRoute path="/register" exact onlyAnonimous={true}>
+            <RegisterPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/forgot-password" onlyAnonimous={true}>
+            <ForgotPasswordPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/reset-password" onlyAnonimous={true}>
+            <ResetPasswordPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/profile">
+            <ProfilePage />
+          </ProtectedRoute>
+          
+          <Route>
+            <NotFoundPage />
+          </Route>
+        </Switch>
       </main>
+
+      {background && (
+        <Route
+          path="/ingredients/:id"
+          children={
+            <Modal
+              title="Детали ингредиента"
+              onClose={handleIngredientDetailsCloseModal}
+              isOpen={true}
+            >
+              <IngredientDetails />
+            </Modal>
+          }
+        />
+      )}
     </>
   );
 }

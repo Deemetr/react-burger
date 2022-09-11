@@ -6,7 +6,7 @@ function checkResponse(response) {
   try {
     return response.ok
       ? response.json()
-      : Promise.reject(`Ошибка ${response.status}`);
+      : response.json().then((error) => Promise.reject(error));
   } catch (error) {
     Promise.reject(`Что-то пошло не так...`);
     console.error(error);

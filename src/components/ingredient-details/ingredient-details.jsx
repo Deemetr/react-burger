@@ -1,13 +1,39 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import style from "./ingredient-details.module.css";
 
 import { getClassName } from "../../utils";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { fetchIngredients } from "../../services/reducers/ingredients-reducer";
 
 function IngredientDetails(props) {
-  const ingredient = useSelector(
-    (store) => store.ingredients.currentIngredient
-  );
+  const { items } = useSelector((store) => store.ingredients);
+  let [ingredient, setIngredient] = useState();
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const id = location.pathname.split("/").pop();
+
+    if (!items) {
+      return;
+    }
+
+    const ingredient = items
+      .reduce((state, current) => [...state, ...current.items], [])
+      .find((item) => item._id === id);
+
+    if (ingredient) {
+      setIngredient(ingredient);
+    }
+  }, [location, items]);
 
   if (!ingredient) {
     return;
