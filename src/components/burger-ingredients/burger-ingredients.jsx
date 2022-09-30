@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import TabContainer from "../tab-container/tab-container";
-import IngredientsGroup from "../ingredients-group/ingredients-group";
 import { getClassName } from "../../utils";
+import IngredientsGroup from "../ingredients-group/ingredients-group";
+import TabContainer from "../tab-container/tab-container";
 
-import style from "./burger-ingredients.module.css";
 import { useEffect, useRef } from "react";
 import { INGREDIENT_TYPES } from "../../constants";
+import style from "./burger-ingredients.module.css";
 
 import { setCurrentTab } from "../../services/reducers/tabs-reducer";
 

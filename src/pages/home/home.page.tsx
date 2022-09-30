@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useEffect } from "react";
 
 import { useDispatch } from "react-redux";
 import { DndProvider } from "react-dnd";
@@ -12,8 +13,9 @@ import { fetchIngredients } from "../../services/reducers/ingredients-reducer";
 
 import styles from "./home.page.module.css";
 
+
 export default function HomePage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
     dispatch(fetchIngredients());
