@@ -2,8 +2,8 @@ import { CookieConfig } from "../models";
 
 export function setCookie(
   name: string,
-  value: string | null,
-  config: CookieConfig
+  value?: string | null,
+  config?: CookieConfig
 ) {
   config = config || {};
   let exp = config.expires;
@@ -25,7 +25,7 @@ export function setCookie(
   document.cookie = updatedCookie;
 }
 
-export function getCookie(name: string): string | undefined {
+export function getCookie(name: string): string {
   const matches = document.cookie.match(
     new RegExp(
       "(?:^|; )" +
@@ -34,7 +34,7 @@ export function getCookie(name: string): string | undefined {
         "=([^;]*)"
     )
   );
-  return matches ? decodeURIComponent(matches[1]) : undefined;
+  return matches ? decodeURIComponent(matches[1]) : "";
 }
 
 export function deleteCookie(name: string): void {

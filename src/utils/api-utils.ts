@@ -1,4 +1,4 @@
-async function checkResponse<T>(response: Response): Promise<T | string> {
+async function checkResponse<T>(response: Response): Promise<T> {
   if (!response) {
     Promise.reject("Ответ от сервера пуст");
   }

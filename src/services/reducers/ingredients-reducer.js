@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -64,6 +64,7 @@ const ingredientsSlice = createSlice({
     [setOrderObject]: (state, action) => {
       state.selectedItems = [];
       state.selectedBun = null;
+      state.counters = {};
     },
   },
 });

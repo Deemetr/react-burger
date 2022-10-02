@@ -33,10 +33,6 @@ export default function ForgotPasswordPage() {
     );
   }
 
-  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    inputChange(event);
-  };
-
   return (
     <div className={styles["forgot-password-page"]}>
       <h2 className={styles["forgot-password__title"]}>
@@ -45,7 +41,7 @@ export default function ForgotPasswordPage() {
 
       <form>
         <EmailInput
-          onChange={inputChangeHandler}
+          onChange={inputChange}
           value={values.email}
           name={"email"}
         />
