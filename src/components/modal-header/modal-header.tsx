@@ -1,5 +1,5 @@
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ReactNode } from "react";
+import { ModalData } from "../../models/components";
 
 import { getClassName } from "../../utils";
 
@@ -8,10 +8,7 @@ import style from "./modal-header.module.css";
 function ModalHeader({
   children,
   onClose,
-}: {
-  children: ReactNode;
-  onClose: () => void;
-}) {
+}: Pick<ModalData, "children" | "onClose">) {
   return (
     <div className={style.header}>
       <h2 className={getClassName(style.title, "text text_type_main-large")}>

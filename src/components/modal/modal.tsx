@@ -1,5 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import ReactDOM from "react-dom";
+import { ModalData } from "../../models/components";
 
 import ModalHeader from "../modal-header/modal-header";
 import ModalOverlay from "../modal-overlay/modal-overlay";
@@ -12,13 +13,7 @@ function Modal({
   onClose,
   modalRootId = "modal-root",
   isOpen,
-}: {
-  children: ReactNode;
-  title?: string;
-  onClose: () => void;
-  modalRootId?: string;
-  isOpen: boolean;
-}) {
+}: ModalData) {
   const createModalRoot = (modalRootId: string) => {
     const wrapperElement = document.createElement("div");
     wrapperElement.setAttribute("id", modalRootId);

@@ -41,7 +41,7 @@ function IngredientCard({
   }, [isDrag]);
 
   if (!ingredient) {
-    return <></>;
+    return null;
   }
 
   const handleClick = (ingredient: Ingredient) => {

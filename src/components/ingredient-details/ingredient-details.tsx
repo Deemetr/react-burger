@@ -45,7 +45,7 @@ function IngredientDetails() {
   }, [location, items]);
 
   if (!ingredient) {
-    return <></>;
+    return null;
   }
 
   return (
