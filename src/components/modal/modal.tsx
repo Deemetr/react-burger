@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 import ModalHeader from "../modal-header/modal-header";
@@ -13,7 +13,7 @@ function Modal({
   modalRootId = "modal-root",
   isOpen,
 }: {
-  children: any;
+  children: ReactNode;
   title?: string;
   onClose: () => void;
   modalRootId?: string;

@@ -10,7 +10,7 @@ export function ProtectedRoute({
   exact,
   ...rest
 }: {
-  children: any;
+  children: ReactNode;
   onlyAnonimous?: boolean;
   path: string;
   exact: boolean;

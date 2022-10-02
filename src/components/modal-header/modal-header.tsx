@@ -1,4 +1,5 @@
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { ReactNode } from "react";
 
 import { getClassName } from "../../utils";
 
@@ -8,7 +9,7 @@ function ModalHeader({
   children,
   onClose,
 }: {
-  children: any;
+  children: ReactNode;
   onClose: () => void;
 }) {
   return (
