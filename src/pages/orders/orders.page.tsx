@@ -14,6 +14,7 @@ import styles from "./orders.page.module.css";
 export default function OrdersPage() {
   const location = useLocation();
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     const token = getCookie("token")?.replace("Bearer ", "");
 

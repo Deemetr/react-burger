@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import { LocationState } from "../../models";
 
 import {
   Feed,
@@ -13,6 +14,10 @@ import {
   RegisterPage,
   ResetPasswordPage
 } from "../../pages/index";
+import {
+  WS_CONNECTION_START,
+  WS_DISCONNECT
+} from "../../services/actions/wsActionTypes";
 import { useAppDispatch } from "../../services/reducers";
 import {
   fetchIngredients,
@@ -27,14 +32,21 @@ import { ProtectedRoute } from "../protected-route/protected-route";
 import style from "./app.module.css";
 
 function App() {
-  const location = useLocation<Location>();
+  const location = useLocation<LocationState>();
   const history = useHistory();
-  let background = location.state && (location.state as any).background;
-
+  let background = location.state && location.state.background;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchIngredients());
+    dispatch({
+      type: WS_CONNECTION_START,
+      url: "wss://norma.nomoreparties.space/orders/all",
+    });
+
+    return () => {
+      dispatch({ type: WS_DISCONNECT });
+    };
   }, [dispatch]);
 
   const handleIngredientDetailsCloseModal = () => {
@@ -50,7 +62,7 @@ function App() {
     <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
-        <Switch location={background || location}>
+        <Switch location={(background || location) as any}>
           <Route path="/" exact>
             <HomePage />
           </Route>

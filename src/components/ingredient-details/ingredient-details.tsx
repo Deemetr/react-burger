@@ -8,9 +8,7 @@ import { Ingredient, LocationState } from "../../models";
 import { useAppSelector } from "../../services/reducers";
 
 function IngredientDetails() {
-  const { items }: { items: { items: Ingredient[] }[] } = useAppSelector(
-    (store) => store.ingredients
-  );
+  const { items } = useAppSelector((store) => store.ingredients);
   let [ingredient, setIngredient] = useState<Ingredient>();
 
   const location = useLocation<LocationState>();
