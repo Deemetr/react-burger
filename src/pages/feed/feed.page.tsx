@@ -2,11 +2,8 @@ import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import OrderCard from "../../components/order-card/order-card";
 import { Order } from "../../models/order";
-import {
-  WS_CONNECTION_START,
-  WS_DISCONNECT
-} from "../../services/actions/wsActionTypes";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
+import { wsConnect, wsDisconnect } from "../../services/reducers/feed-reducer";
 import { getClassName } from "../../utils";
 import styles from "./feed.page.module.css";
 
@@ -14,12 +11,9 @@ export default function Feed() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch({
-      type: WS_CONNECTION_START,
-      url: "wss://norma.nomoreparties.space/orders/all",
-    });
+    dispatch(wsConnect("wss://norma.nomoreparties.space/orders/all"));
     return () => {
-      dispatch({ type: WS_DISCONNECT });
+      dispatch(wsDisconnect());
     };
   }, []);
 

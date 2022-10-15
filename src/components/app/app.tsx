@@ -14,11 +14,9 @@ import {
   RegisterPage,
   ResetPasswordPage
 } from "../../pages/index";
-import {
-  WS_CONNECTION_START,
-  WS_DISCONNECT
-} from "../../services/actions/wsActionTypes";
+
 import { useAppDispatch } from "../../services/reducers";
+import { wsConnect, wsDisconnect } from "../../services/reducers/feed-reducer";
 import {
   fetchIngredients,
   setCurrentIngredient
@@ -39,13 +37,10 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchIngredients());
-    dispatch({
-      type: WS_CONNECTION_START,
-      url: "wss://norma.nomoreparties.space/orders/all",
-    });
+    dispatch(wsConnect("wss://norma.nomoreparties.space/orders/all"));
 
     return () => {
-      dispatch({ type: WS_DISCONNECT });
+      dispatch(wsDisconnect());
     };
   }, [dispatch]);
 

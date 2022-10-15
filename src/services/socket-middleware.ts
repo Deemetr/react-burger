@@ -1,19 +1,9 @@
 import type { Middleware, MiddlewareAPI } from "redux";
-import {
-  WS_CONNECTION_START,
-  WS_DISCONNECT,
-  WS_GET_MESSAGE
-} from "./actions/wsActionTypes";
+import { TWsActions } from "./reducers/feed-reducer";
 
-import {
-  wsConncectionSuccess,
-  wsConnectionClosed,
-  wsConnectionError,
-  wsGetMessage
-} from "./reducers/feed-reducer";
 import type { AppDispatch, RootState } from "./reducers/index";
 
-export const socketMiddleware = (): Middleware => {
+export const socketMiddleware = (wsActions: TWsActions): Middleware => {
   return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
     let socket: WebSocket | null = null;
 
@@ -21,32 +11,27 @@ export const socketMiddleware = (): Middleware => {
       const { dispatch } = store;
       const { type, payload } = action;
 
-      if (type === WS_CONNECTION_START) {
-        socket = new WebSocket(action.url);
+      if (type === wsActions.connect("").type) {
+        socket = new WebSocket(payload);
       }
 
       if (socket) {
         socket.onopen = () => {
-          dispatch(wsConncectionSuccess());
+          dispatch(wsActions.onOpen());
         };
 
         socket.onerror = (event) => {
-          dispatch(wsConnectionError(event));
+          dispatch(wsActions.onError(event));
         };
 
         socket.onmessage = (event) => {
-          dispatch(wsGetMessage(event.data));
+          dispatch(wsActions.onMessage(event.data));
         };
         socket.onclose = () => {
-          dispatch(wsConnectionClosed());
+          dispatch(wsActions.onClose());
         };
 
-        if (type === WS_GET_MESSAGE) {
-          const message = payload;
-          socket.send(JSON.stringify(message));
-        }
-
-        if (type === WS_DISCONNECT) {
+        if (type === wsActions.disconnect().type && socket) {
           socket.close();
           socket = null;
         }

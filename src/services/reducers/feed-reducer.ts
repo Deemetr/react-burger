@@ -1,4 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction
+} from "@reduxjs/toolkit";
 import { Order } from "../../models/order";
 
 interface FeedStore {
@@ -46,6 +49,8 @@ const feedSlice = createSlice({
       state.total = total;
       state.totalToday = totalToday;
     },
+    wsConnect(state, action: PayloadAction<string>) {},
+    wsDisconnect(state) {},
   },
 });
 
@@ -55,4 +60,15 @@ export const {
   wsConnectionClosed,
   wsConnectionError,
   wsGetMessage,
+  wsConnect,
+  wsDisconnect,
 } = feedSlice.actions;
+
+export type TWsActions = {
+  disconnect: typeof wsDisconnect;
+  connect: typeof wsConnect;
+  onOpen: typeof wsConncectionSuccess;
+  onError: typeof wsConnectionError;
+  onMessage: typeof wsGetMessage;
+  onClose: typeof wsConnectionClosed;
+};
