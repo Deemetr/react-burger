@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 import { getClassName } from "../../utils";
 
 import { Ingredient, LocationState } from "../../models";
-import { fetchIngredients } from "../../services/reducers/ingredients-reducer";
 
 function IngredientDetails() {
   const { items }: { items: { items: Ingredient[] }[] } = useSelector(
@@ -17,10 +16,6 @@ function IngredientDetails() {
 
   const location = useLocation<LocationState>();
   const dispatch = useDispatch<any>();
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   useEffect(() => {
     const id = location.pathname.split("/").pop();
