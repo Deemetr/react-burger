@@ -7,6 +7,7 @@ import {
   CurrencyIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { useHistory } from "react-router-dom";
 import { Ingredient } from "../../models";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { addIngredient } from "../../services/reducers/ingredients-reducer";
@@ -23,9 +24,11 @@ function BurgerConstructor({
 }: {
   onOrderCreateClick: () => void;
 }) {
+  const history = useHistory();
   const { selectedItems, selectedBun: bun } = useAppSelector(
     (store) => store.ingredients
   );
+  const { loggedIn } = useAppSelector((store) => store.auth);
   const dispatch = useAppDispatch();
 
   const [, dropTarget] = useDrop({
@@ -44,6 +47,11 @@ function BurgerConstructor({
   };
 
   const handlerCreateOrderClick = async () => {
+    if (!loggedIn) {
+      history.push("/login");
+      return;
+    }
+
     if (!selectedItems || selectedItems.length === 0) {
       return;
     }

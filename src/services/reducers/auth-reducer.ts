@@ -10,7 +10,7 @@ import {
   updateUser
 } from "../api/auth.api.service";
 
-import { deleteCookie, getCookie, setCookie } from "../../utils";
+import { deleteCookie, setCookie } from "../../utils";
 
 export const registerUserThunk = createAsyncThunk(
   "auth/registerUser",
@@ -96,7 +96,7 @@ const initialState: AuthStore = {
     email: "",
     password: "",
   },
-  loggedIn: !!getCookie("token"),
+  loggedIn: false,
   resetLinkSent: false,
   passwordReset: false,
   accessToken: null,
@@ -115,7 +115,6 @@ const authSlice = createSlice({
     [getUserThunk.fulfilled.toString()]: (state, { payload }) =>
       setUserData(state, payload),
     [requestPasswordResetThunk.fulfilled.toString()]: (state) => {
-      debugger;
       state.resetLinkSent = true;
       state.passwordReset = false;
     },

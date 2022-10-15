@@ -22,11 +22,20 @@ import styles from "./profile.page.module.css";
 export default function ProfilePage() {
   const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
   const [values, onChange, setValues] = useForm<User>({
     name: user.name,
     login: user.email,
     password: user.password,
   });
+
+  useEffect(() => {
+    setValues({
+      login: user.email,
+      name: user.name,
+      password: user.password,
+    });
+  }, [user]);
 
   useEffect(() => {
     dispatch(getUserThunk());
