@@ -3,6 +3,7 @@ export interface Order {
   _id: string;
   status: "done";
   number: number;
+  name: string;
   createdAt: string;
   updatedAt: string;
 }

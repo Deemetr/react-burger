@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 24px;
 
-  width: 100%;
   border-radius: 40px;
 
   padding: 24px;
@@ -23,7 +22,6 @@
 }
 
 .order__ingredients {
-  flex: 1 0 100%;
   display: flex;
   padding-left: 16px;
 }

@@ -32,8 +32,6 @@ export default function OrderCard({ order }: { order: Order }) {
       return null;
     }
 
-    debugger;
-
     const flatIngredients: Ingredient[] = ingredients.reduce(
       (state: Ingredient[], current: IngredientGroup) => [
         ...state,
@@ -50,7 +48,7 @@ export default function OrderCard({ order }: { order: Order }) {
       .filter((item) => order.ingredients.includes(item.id));
 
     return _ingredients.map((item) => (
-      <IngredientPreview imgSrc={item.image} />
+      <IngredientPreview key={item.id} imgSrc={item.image} />
     ));
   }, [ingredients, order]);
 
@@ -63,8 +61,8 @@ export default function OrderCard({ order }: { order: Order }) {
         {renderDate()}
       </div>
 
-      <span className="order__name text text_type_main-default">
-        Death Star Starship Main бургер
+      <span className="order__name text text_type_main-medium">
+        {order.name}
       </span>
 
       <div className={styles["order__content"]}>

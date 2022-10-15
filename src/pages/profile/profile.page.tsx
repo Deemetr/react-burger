@@ -10,14 +10,13 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useForm } from "../../hooks/useForm";
-import { getClassName } from "../../utils";
 
 import {
   getUserThunk,
-  logoutThunk,
   updateUserThunk
 } from "../../services/reducers/auth-reducer";
 
+import ProfileNav from "../../components/profile-nav/profile-nav";
 import { User } from "../../models";
 import styles from "./profile.page.module.css";
 
@@ -29,10 +28,6 @@ export default function ProfilePage() {
     login: user.email,
     password: user.password,
   });
-
-  const logout = () => {
-    dispatch(logoutThunk());
-  };
 
   useEffect(() => {
     dispatch(getUserThunk());
@@ -47,30 +42,7 @@ export default function ProfilePage() {
 
   return (
     <div className={styles["profile-page"]}>
-      <ul className={getClassName(styles.navigation, "mr-15")}>
-        <li
-          className={getClassName(styles["item"], "text text_type_main-medium")}
-        >
-          Профиль
-        </li>
-        <li
-          className={getClassName(
-            styles["item"],
-            "text text_type_main-medium text_color_inactive"
-          )}
-        >
-          История заказов
-        </li>
-        <li
-          className={getClassName(
-            styles["item"],
-            "text text_type_main-medium text_color_inactive"
-          )}
-          onClick={logout}
-        >
-          Выход
-        </li>
-      </ul>
+      <ProfileNav />
 
       <div className="user-data">
         <Input

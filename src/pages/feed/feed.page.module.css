@@ -1,0 +1,45 @@
+.feed__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 60px;
+}
+
+.feed__list {
+  width: 584px;
+
+  height: 600px;
+  overflow-y: scroll;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  padding-right: 15px;
+}
+
+.stats {
+  width: 580px;
+  display: flex;
+  flex-direction: column;
+
+  gap: 60px;
+}
+
+.orders {
+  display: flex;
+  justify-content: space-between;
+}
+
+.orders-done,
+.orders-in-work {
+  width: 272px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.orders-total,
+.order-today {
+  display: flex;
+  flex-direction: column;
+}

@@ -18,9 +18,9 @@
 .ingredient::before {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -2px;
   border-radius: 50%;
-  padding: 5px;
+  padding: 3px;
   background: linear-gradient(to left, #801ab2, #4c4cff);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;

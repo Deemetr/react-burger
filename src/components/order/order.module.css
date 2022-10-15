@@ -1,0 +1,49 @@
+.order {
+  display: flex;
+  flex-direction: column;
+
+  width: 640px;
+}
+
+.order__number {
+  text-align: center;
+}
+
+.order__title {
+  display: flex;
+  flex-direction: column;
+}
+
+.order__ingredients {
+  height: 366px;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.order__footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+}
+
+.order__status {
+  color: #00cccc;
+}
+
+.ingredient {
+  padding-left: 20px;
+
+  display: flex;
+  align-items: center;
+}
+
+.price {
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+}
