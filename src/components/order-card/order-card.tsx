@@ -1,9 +1,9 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useCallback, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { IngredientType } from "../../enums";
 import { Ingredient, IngredientGroup } from "../../models";
 import { Order } from "../../models/order";
+import { useAppSelector } from "../../services/reducers";
 import { getClassName } from "../../utils";
 
 import IngredientPreview from "../ingredient-preview/ingredient-preview";
@@ -11,7 +11,7 @@ import IngredientPreview from "../ingredient-preview/ingredient-preview";
 import styles from "./order-card.module.css";
 
 export default function OrderCard({ order }: { order: Order }) {
-  const ingredients = useSelector((state: any) => state.ingredients.items);
+  const ingredients = useAppSelector((state) => state.ingredients.items);
 
   const renderDate = () => {
     const today = new Date().toLocaleDateString();

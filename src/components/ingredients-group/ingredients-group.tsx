@@ -1,7 +1,7 @@
 import { RefObject } from "react";
-import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { Ingredient } from "../../models";
+import { useAppSelector } from "../../services/reducers";
 
 import IngredientCard from "../ingredient-card/ingredient-card";
 
@@ -16,7 +16,7 @@ function IngredientsGroup({
   groupRef: RefObject<HTMLDivElement>;
   title: string;
 }) {
-  const counters = useSelector((store: any) => store.ingredients.counters);
+  const counters = useAppSelector((store) => store.ingredients.counters);
   const location = useLocation();
 
   return (

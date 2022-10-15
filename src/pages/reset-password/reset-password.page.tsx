@@ -9,13 +9,13 @@ import {
 import { useForm } from "../../hooks/useForm";
 import { getClassName } from "../../utils";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { resetPasswordThunk } from "../../services/reducers/auth-reducer";
 import styles from "./reset-password.page.module.css";
 
 export default function ResetPasswordPage() {
-  const { passwordReset } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch<any>();
+  const { passwordReset } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const [values, inputChange] = useForm({
     token: "",

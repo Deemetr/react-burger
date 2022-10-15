@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import OrderCard from "../../components/order-card/order-card";
 import ProfileNav from "../../components/profile-nav/profile-nav";
@@ -8,7 +7,7 @@ import {
   WS_CONNECTION_START,
   WS_DISCONNECT
 } from "../../services/actions/wsActionTypes";
-import { useAppDispatch } from "../../services/reducers";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { getCookie } from "../../utils";
 import styles from "./orders.page.module.css";
 
@@ -27,8 +26,8 @@ export default function OrdersPage() {
     };
   }, []);
 
-  const { orders }: { orders: OrderType[] } = useSelector(
-    (state: any) => state.feed
+  const { orders }: { orders: OrderType[] } = useAppSelector(
+    (state) => state.feed
   );
 
   return (

@@ -1,15 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Order } from "../../models/order";
+
+interface FeedStore {
+  wsConnected: boolean;
+  messages: string[];
+  error?: string;
+  orders: Order[];
+  total: number;
+  totalToday: number;
+}
+
+const initialState: FeedStore = {
+  wsConnected: false,
+  messages: [],
+  error: undefined,
+  orders: [],
+  total: 0,
+  totalToday: 0,
+};
 
 const feedSlice = createSlice({
   name: "feed",
-  initialState: {
-    wsConnected: false,
-    messages: [],
-    error: undefined,
-    orders: [],
-    total: 0,
-    totalToday: 0,
-  },
+  initialState,
   reducers: {
     wsConncectionSuccess(state) {
       state.error = undefined;
@@ -29,8 +41,6 @@ const feedSlice = createSlice({
       if (!success) {
         return;
       }
-
-      debugger;
 
       state.orders = orders;
       state.total = total;

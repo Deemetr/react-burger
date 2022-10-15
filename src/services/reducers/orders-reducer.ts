@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { createOrder } from "../orders.servicce";
 
@@ -7,22 +7,34 @@ export const createOrderThunk = createAsyncThunk(
   createOrder
 );
 
+interface CurrentOrder {
+  name: string;
+  number: number | null;
+}
+
+interface OrderStore {
+  currentOrder: CurrentOrder;
+  requestOrder: boolean;
+}
+
+const initialState: OrderStore = {
+  currentOrder: {
+    name: "",
+    number: null,
+  },
+  requestOrder: false,
+};
+
 const ordersSlice = createSlice({
   name: "orders",
-  initialState: {
-    currentOrder: {
-      name: "",
-      number: null,
-    },
-    requestOrder: false
-  },
+  initialState,
   reducers: {
     setRequestOrder(state, action) {
       state.requestOrder = action.payload;
-    }
+    },
   },
   extraReducers: {
-    [createOrderThunk.fulfilled]: (state, action) => {
+    [createOrderThunk.fulfilled.toString()]: (state, action) => {
       state.currentOrder = action.payload;
       state.requestOrder = false;
     },

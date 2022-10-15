@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
 
 import {
   Button,
@@ -9,6 +8,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Ingredient } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { addIngredient } from "../../services/reducers/ingredients-reducer";
 import {
   createOrderThunk,
@@ -23,13 +23,10 @@ function BurgerConstructor({
 }: {
   onOrderCreateClick: () => void;
 }) {
-  const {
-    selectedItems,
-    selectedBun: bun,
-  }: { selectedItems: Ingredient[]; selectedBun: Ingredient } = useSelector(
-    (store: any) => store.ingredients
+  const { selectedItems, selectedBun: bun } = useAppSelector(
+    (store) => store.ingredients
   );
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -63,10 +60,9 @@ function BurgerConstructor({
   };
 
   const totalPrice = useMemo(() => {
-    return selectedItems.reduce(
-      (acc, curr) => acc + curr.price,
-      bun?.price * 2 || 0
-    );
+    const initialValue = bun ? bun.price * 2 : 0;
+
+    return selectedItems.reduce((acc, curr) => acc + curr.price, initialValue);
   }, [selectedItems, bun]);
 
   const selectedIngredients = useMemo(() => {

@@ -1,12 +1,12 @@
-import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { useAppDispatch } from "../../services/reducers";
 
 import { logoutThunk } from "../../services/reducers/auth-reducer";
 import { getClassName } from "../../utils";
 import styles from "./profile-nav.module.css";
 
 export default function ProfileNav() {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const logout = () => {
     dispatch(logoutThunk());
   };

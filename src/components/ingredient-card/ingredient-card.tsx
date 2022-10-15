@@ -1,5 +1,4 @@
 import { useDrag } from "react-dnd";
-import { useDispatch } from "react-redux";
 
 import {
   Counter,
@@ -12,6 +11,7 @@ import { setCurrentIngredient } from "../../services/reducers/ingredients-reduce
 
 import { useEffect, useState } from "react";
 import { Ingredient } from "../../models";
+import { useAppDispatch } from "../../services/reducers";
 import style from "./ingredient-card.module.css";
 
 function IngredientCard({
@@ -29,7 +29,7 @@ function IngredientCard({
     }),
   });
   const [ingredientStyle, setIngredientStyle] = useState<string[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const _styles = [style.ingredient];

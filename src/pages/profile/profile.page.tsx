@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-
 import {
   Button,
   EmailInput,
@@ -18,11 +16,12 @@ import {
 
 import ProfileNav from "../../components/profile-nav/profile-nav";
 import { User } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import styles from "./profile.page.module.css";
 
 export default function ProfilePage() {
-  const { user } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch<any>();
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const [values, onChange, setValues] = useForm<User>({
     name: user.name,
     login: user.email,

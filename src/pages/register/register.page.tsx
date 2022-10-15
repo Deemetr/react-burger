@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import {
@@ -14,6 +13,7 @@ import { getClassName } from "../../utils";
 import styles from "./register.page.module.css";
 
 import { User } from "../../models";
+import { useAppDispatch } from "../../services/reducers";
 import { registerUserThunk } from "../../services/reducers/auth-reducer";
 
 export default function RegisterPage() {
@@ -23,7 +23,7 @@ export default function RegisterPage() {
     login: "",
   });
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
 
   const registerUser = () => {
     dispatch(

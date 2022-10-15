@@ -1,4 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect, useLocation } from "react-router-dom";
 
 import {
@@ -11,6 +10,7 @@ import { useForm } from "../../hooks/useForm";
 import { getClassName } from "../../utils";
 
 import { LoginData } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { loginThunk } from "../../services/reducers/auth-reducer";
 import styles from "./login.page.module.css";
 
@@ -20,8 +20,8 @@ export default function Login() {
     password: "",
   });
 
-  const { loggedIn } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch<any>();
+  const { loggedIn } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const { state } = useLocation();
   const login = () => {
     dispatch(loginThunk({ ...values }));

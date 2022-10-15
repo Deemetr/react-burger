@@ -1,4 +1,4 @@
-type IngredientTypes = {
+export type IngredientTypes = {
   [index in "BUN" | "MAIN" | "SAUCE"]: string;
 };
 

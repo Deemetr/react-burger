@@ -1,10 +1,10 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { IngredientType } from "../../enums";
 import { Ingredient, IngredientGroup } from "../../models";
 import { Order as OrderType } from "../../models/order";
+import { useAppSelector } from "../../services/reducers";
 import { getClassName } from "../../utils";
 import IngredientPreview from "../ingredient-preview/ingredient-preview";
 import styles from "./order.module.css";
@@ -17,8 +17,8 @@ type Countable = Ingredient & { count: number };
 
 export default function Order() {
   const { id } = useParams<OrderRouteParams>();
-  const { orders }: { orders: OrderType[] } = useSelector(
-    (state: any) => state.feed
+  const { orders }: { orders: OrderType[] } = useAppSelector(
+    (state) => state.feed
   );
 
   const order = useMemo(
@@ -26,8 +26,8 @@ export default function Order() {
     [orders, id]
   );
 
-  const ingredientsGroups: IngredientGroup[] = useSelector(
-    (state: any) => state.ingredients.items
+  const ingredientsGroups: IngredientGroup[] = useAppSelector(
+    (state) => state.ingredients.items
   );
 
   const _ingredients: Countable[] = useMemo(() => {

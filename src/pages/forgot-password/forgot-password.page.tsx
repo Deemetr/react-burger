@@ -5,10 +5,9 @@ import {
   EmailInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { useSelector } from "react-redux";
 import { useForm } from "../../hooks/useForm";
 import { ForgotPasswordData } from "../../models";
-import { useAppDispatch } from "../../services/reducers";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { requestPasswordResetThunk } from "../../services/reducers/auth-reducer";
 import { getClassName } from "../../utils";
 import styles from "./forgot-password.page.module.css";
@@ -17,7 +16,7 @@ export default function ForgotPasswordPage() {
     email: "",
   });
 
-  const { resetLinkSent } = useSelector((state: any) => state.auth);
+  const { resetLinkSent } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
 

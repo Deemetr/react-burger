@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-
 import { getClassName } from "../../utils";
 import style from "./order-details.module.css";
 
@@ -7,11 +5,12 @@ import acepted1x from "../../images/acepted.png";
 import acepted2x from "../../images/acepted@2x.png";
 import acepted3x from "../../images/acepted@3x.png";
 
+import { useAppSelector } from "../../services/reducers";
 import Loader from "../loader/loader";
 
 function OrderDetails() {
-  const { currentOrder, requestOrder } = useSelector(
-    (store: any) => store.orders
+  const { currentOrder, requestOrder } = useAppSelector(
+    (store) => store.orders
   );
 
   const content = requestOrder ? (

@@ -19,7 +19,7 @@ const refreshTokenRequest = async () => {
   }).then(checkResponse<RefreshTokenResponse>);
 };
 
-const fetchWithRefresh = async (url: string, options: any) => {
+const fetchWithRefresh = async <T>(url: string, options: any): Promise<T> => {
   try {
     const _options = {
       ...options,
@@ -29,7 +29,7 @@ const fetchWithRefresh = async (url: string, options: any) => {
     };
 
     const response = await fetch(url, _options);
-    return await checkResponse(response);
+    return await checkResponse<T>(response);
   } catch (err: any) {
     if (err.message === "jwt expired") {
       const { refreshToken, accessToken } = await refreshTokenRequest();

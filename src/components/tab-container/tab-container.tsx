@@ -1,21 +1,21 @@
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { RefObject } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import { IngredientType } from "../../enums";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { setCurrentTab } from "../../services/reducers/tabs-reducer";
 import style from "./tab-container.module.css";
 
 function TabContainer({ tabsRef }: { tabsRef: RefObject<HTMLDivElement> }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onTabClick = (tabName: string) => {
     dispatch(setCurrentTab(tabName));
   };
 
-  const currentTab: IngredientType = useSelector(
-    (store: any) => store.tabs.currentTab
+  const currentTab: IngredientType = useAppSelector(
+    (store) => store.tabs.currentTab
   );
 
   return (

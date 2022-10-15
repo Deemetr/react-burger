@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
 
 import {
   ConstructorElement,
@@ -8,6 +7,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { Ingredient } from "../../models";
+import { useAppDispatch } from "../../services/reducers";
 import {
   moveIngredient,
   removeIngredient
@@ -21,7 +21,7 @@ export default function BurgerConstructorItem({
   ingredient: Ingredient;
   index: number;
 }) {
-  const dispatch = useDispatch<any>();
+  const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const onIngredientDelete = (index: number) => {
     dispatch(removeIngredient(index));
