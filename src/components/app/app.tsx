@@ -2,7 +2,13 @@ import { useDispatch } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 
 import {
-  ForgotPasswordPage, HomePage, Login, NotFoundPage, ProfilePage, RegisterPage, ResetPasswordPage
+  ForgotPasswordPage,
+  HomePage,
+  Login,
+  NotFoundPage,
+  ProfilePage,
+  RegisterPage,
+  ResetPasswordPage
 } from "../../pages/index";
 import { setCurrentIngredient } from "../../services/reducers/ingredients-reducer";
 import { getClassName } from "../../utils";
@@ -11,6 +17,8 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import style from "./app.module.css";
+
+import OrderCard from "../order-card/order-card";
 
 function App() {
   const location = useLocation<Location>();
@@ -71,6 +79,21 @@ function App() {
           }
         />
       )}
+
+      <OrderCard
+        order={{
+          _id: "",
+          number: 3241432,
+          createdAt: "2021-06-23T14:43:22.587Z",
+          updatedAt: "2021-06-23T14:43:22.603Z",
+          status: "done",
+          ingredients: [
+            "60d3b41abdacab0026a733c6",
+            "60d3b41abdacab0026a733cd",
+            "60d3b41abdacab0026a733c9",
+          ],
+        }}
+      />
     </>
   );
 }

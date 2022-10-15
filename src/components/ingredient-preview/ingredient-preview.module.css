@@ -1,0 +1,32 @@
+.ingredient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: -16px;
+
+  position: relative;
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+
+  box-sizing: border-box;
+  background: #131316;
+}
+
+.ingredient::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(to left, #801ab2, #4c4cff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.ingredient img {
+  width: 100px;
+}
