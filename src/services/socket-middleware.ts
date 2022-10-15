@@ -1,5 +1,4 @@
 import type { Middleware, MiddlewareAPI } from "redux";
-import { getCookie } from "../utils";
 import {
   WS_CONNECTION_START,
   WS_DISCONNECT,
@@ -23,12 +22,7 @@ export const socketMiddleware = (): Middleware => {
       const { type, payload } = action;
 
       if (type === WS_CONNECTION_START) {
-        const token = getCookie("token")?.replace("Bearer ", "");
-        const url = action.secure
-          ? `wss://norma.nomoreparties.space/orders?token=${token}`
-          : "wss://norma.nomoreparties.space/orders/all";
-
-        socket = new WebSocket(url);
+        socket = new WebSocket(action.url);
       }
 
       if (socket) {

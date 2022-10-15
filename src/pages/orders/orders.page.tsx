@@ -9,15 +9,18 @@ import {
   WS_DISCONNECT
 } from "../../services/actions/wsActionTypes";
 import { useAppDispatch } from "../../services/reducers";
+import { getCookie } from "../../utils";
 import styles from "./orders.page.module.css";
 
 export default function OrdersPage() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   useEffect(() => {
+    const token = getCookie("token")?.replace("Bearer ", "");
+
     dispatch({
       type: WS_CONNECTION_START,
-      secure: true,
+      url: `wss://norma.nomoreparties.space/orders?token=${token}`,
     });
     return () => {
       dispatch({ type: WS_DISCONNECT });

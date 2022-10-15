@@ -17,7 +17,7 @@ export default function Feed() {
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
-      secure: false,
+      url: "wss://norma.nomoreparties.space/orders/all",
     });
     return () => {
       dispatch({ type: WS_DISCONNECT });
