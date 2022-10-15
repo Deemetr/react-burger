@@ -1,66 +1,32 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import OrderCard from "../../components/order-card/order-card";
 import ProfileNav from "../../components/profile-nav/profile-nav";
 import { Order as OrderType } from "../../models/order";
+import {
+  WS_CONNECTION_START,
+  WS_DISCONNECT
+} from "../../services/actions/wsActionTypes";
+import { useAppDispatch } from "../../services/reducers";
 import styles from "./orders.page.module.css";
 
 export default function OrdersPage() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch({
+      type: WS_CONNECTION_START,
+      secure: true,
+    });
+    return () => {
+      dispatch({ type: WS_DISCONNECT });
+    };
+  }, []);
 
-  const orders: OrderType[] = [
-    {
-      ingredients: [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733cd",
-        "60d3b41abdacab0026a733c9",
-      ],
-      _id: "1",
-      status: "done",
-      number: 1,
-      name: "Death Star Starship Main бургер",
-      createdAt: "2021-06-23T20:11:01.403Z",
-      updatedAt: "2021-06-23T20:11:01.406Z",
-    },
-    {
-      ingredients: [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733cd",
-        "60d3b41abdacab0026a733c9",
-      ],
-      _id: "2",
-      status: "done",
-      number: 2,
-      name: "Death Star Starship Main бургер",
-      createdAt: "2021-06-23T20:13:23.654Z",
-      updatedAt: "2021-06-23T20:13:23.657Z",
-    },
-    {
-      ingredients: [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733cd",
-        "60d3b41abdacab0026a733c9",
-      ],
-      _id: "3",
-      status: "done",
-      number: 3,
-      name: "Death Star Starship Main бургер",
-      createdAt: "2021-06-23T20:13:23.654Z",
-      updatedAt: "2021-06-23T20:13:23.657Z",
-    },
-    {
-      ingredients: [
-        "60d3b41abdacab0026a733c6",
-        "60d3b41abdacab0026a733cd",
-        "60d3b41abdacab0026a733c9",
-      ],
-      _id: "4",
-      status: "done",
-      number: 4,
-      name: "Death Star Starship Main бургер",
-      createdAt: "2021-06-23T20:13:23.654Z",
-      updatedAt: "2021-06-23T20:13:23.657Z",
-    },
-  ];
+  const { orders }: { orders: OrderType[] } = useSelector(
+    (state: any) => state.feed
+  );
 
   return (
     <div className={styles["orders-page"]}>

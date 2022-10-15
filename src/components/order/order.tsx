@@ -1,6 +1,7 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { IngredientType } from "../../enums";
 import { Ingredient, IngredientGroup } from "../../models";
 import { Order as OrderType } from "../../models/order";
@@ -8,22 +9,22 @@ import { getClassName } from "../../utils";
 import IngredientPreview from "../ingredient-preview/ingredient-preview";
 import styles from "./order.module.css";
 
+interface OrderRouteParams {
+  id: string;
+}
+
 type Countable = Ingredient & { count: number };
 
 export default function Order() {
-  const order: OrderType = {
-    ingredients: [
-      "60d3b41abdacab0026a733c6",
-      "60d3b41abdacab0026a733cd",
-      "60d3b41abdacab0026a733c9",
-    ],
-    _id: "",
-    status: "done",
-    name: "Death Star Starship Main бургер",
-    number: 324234324,
-    createdAt: "2021-06-23T14:43:22.587Z",
-    updatedAt: "2021-06-23T14:43:22.603Z",
-  };
+  const { id } = useParams<OrderRouteParams>();
+  const { orders }: { orders: OrderType[] } = useSelector(
+    (state: any) => state.feed
+  );
+
+  const order = useMemo(
+    () => orders.find((item) => item._id === id),
+    [orders, id]
+  );
 
   const ingredientsGroups: IngredientGroup[] = useSelector(
     (state: any) => state.ingredients.items
@@ -38,15 +39,17 @@ export default function Order() {
       []
     );
 
-    const orderIngredients = _flatIngredients.filter((item) =>
-      order.ingredients.includes(item._id)
-    );
+    const orderIngredients = order
+      ? _flatIngredients.filter((item) => order.ingredients.includes(item._id))
+      : [];
 
     return orderIngredients.reduce((state: Countable[], item: Ingredient) => {
       const count =
         item.type === IngredientType.BUN
           ? 2
-          : order.ingredients.filter((id) => id === item._id).length;
+          : order
+          ? order.ingredients.filter((id) => id === item._id).length
+          : 0;
 
       return state.some((countable) => countable._id === item._id)
         ? state
@@ -62,6 +65,10 @@ export default function Order() {
       ),
     [_ingredients]
   );
+
+  if (!order) {
+    return null;
+  }
 
   return (
     <div className={styles.order}>
@@ -107,7 +114,7 @@ export default function Order() {
         </div>
       </div>
 
-      <div className={getClassName(styles["order__footer"], 'mb-10')}>
+      <div className={getClassName(styles["order__footer"], "mb-10")}>
         <span className="text text_type_main-default text_color_inactive">
           {order.createdAt}
         </span>

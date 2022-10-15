@@ -1,7 +1,7 @@
 export interface Order {
   ingredients: string[];
   _id: string;
-  status: "done";
+  status: "done" | "pending";
   number: number;
   name: string;
   createdAt: string;

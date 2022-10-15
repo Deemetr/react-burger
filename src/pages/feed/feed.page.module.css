@@ -8,7 +8,7 @@
   width: 584px;
 
   height: 600px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;
@@ -42,4 +42,27 @@
 .order-today {
   display: flex;
   flex-direction: column;
+}
+
+.done-orders {
+  color: #00cccc;
+}
+
+.pending-orders {
+  color: white;
+}
+
+.list {
+  display: flex;
+  flex-flow: column wrap;
+
+  height: 250px;
+  width: 250px;
+  column-gap: 10px;
+
+  overflow-x: auto;
+
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
 }

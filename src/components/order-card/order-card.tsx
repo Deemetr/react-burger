@@ -1,6 +1,7 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { IngredientType } from "../../enums";
 import { Ingredient, IngredientGroup } from "../../models";
 import { Order } from "../../models/order";
 import { getClassName } from "../../utils";
@@ -27,7 +28,7 @@ export default function OrderCard({ order }: { order: Order }) {
     );
   };
 
-  const renderIngredients = useCallback(() => {
+  const _ingredients = useMemo(() => {
     if (!ingredients) {
       return null;
     }
@@ -40,17 +41,50 @@ export default function OrderCard({ order }: { order: Order }) {
       []
     );
 
-    const _ingredients = flatIngredients
+    return flatIngredients
       .map((ingredient) => ({
         id: ingredient._id,
         image: ingredient.image,
+        type: ingredient.type,
+        price: ingredient.price,
       }))
       .filter((item) => order.ingredients.includes(item.id));
+  }, [order]);
 
-    return _ingredients.map((item) => (
-      <IngredientPreview key={item.id} imgSrc={item.image} />
-    ));
-  }, [ingredients, order]);
+  const renderIngredients = useCallback(() => {
+    if (!_ingredients) {
+      return null;
+    }
+
+    const moreThenFive = !_ingredients ? false : _ingredients?.length > 5;
+    const firstFive = _ingredients.slice(0, 5);
+
+    return (
+      <>
+        {firstFive.map((item) => (
+          <IngredientPreview key={item.id} imgSrc={item.image} />
+        ))}
+        {moreThenFive && (
+          <span className="ml-1 text text_type_digits-default">{`+${
+            _ingredients.length - 5
+          }`}</span>
+        )}
+      </>
+    );
+  }, [_ingredients]);
+
+  const orderPrice = useMemo(
+    () =>
+      _ingredients?.reduce((total, ingredient) => {
+        return (
+          total +
+          (ingredient.type === IngredientType.BUN
+            ? ingredient.price * 2
+            : ingredient.price)
+        );
+      }, 0),
+    [_ingredients]
+  );
 
   return (
     <div className={styles.order}>
@@ -70,7 +104,9 @@ export default function OrderCard({ order }: { order: Order }) {
           {renderIngredients()}
         </div>
         <div className={styles["order__price"]}>
-          <span className="text text_type_digits-default mr-1">480</span>
+          <span className="text text_type_digits-default mr-1">
+            {orderPrice}
+          </span>
           <CurrencyIcon type="primary" />
         </div>
       </div>

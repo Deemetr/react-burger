@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 
 import {
@@ -14,6 +13,7 @@ import {
   RegisterPage,
   ResetPasswordPage
 } from "../../pages/index";
+import { useAppDispatch } from "../../services/reducers";
 import {
   fetchIngredients,
   setCurrentIngredient
@@ -29,15 +29,20 @@ import style from "./app.module.css";
 function App() {
   const location = useLocation<Location>();
   const history = useHistory();
-  const dispatch = useDispatch<any>();
   let background = location.state && (location.state as any).background;
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchIngredients());
-  }, []);
+  }, [dispatch]);
 
   const handleIngredientDetailsCloseModal = () => {
     dispatch(setCurrentIngredient(null));
+    history.goBack();
+  };
+
+  const handleCloseModal = () => {
     history.goBack();
   };
 
@@ -106,7 +111,7 @@ function App() {
         <Route
           path="/feed/:id"
           children={
-            <Modal onClose={handleIngredientDetailsCloseModal} isOpen={true}>
+            <Modal onClose={handleCloseModal} isOpen={true}>
               <Order />
             </Modal>
           }
@@ -117,7 +122,7 @@ function App() {
         <Route
           path="/profile/orders/:id"
           children={
-            <Modal onClose={handleIngredientDetailsCloseModal} isOpen={true}>
+            <Modal onClose={handleCloseModal} isOpen={true}>
               <Order />
             </Modal>
           }

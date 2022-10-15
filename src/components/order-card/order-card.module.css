@@ -24,10 +24,16 @@
 .order__ingredients {
   display: flex;
   padding-left: 16px;
+  align-items: center;
 }
 
 .order__price {
   min-width: 73px;
   display: flex;
   align-items: center;
+}
+
+
+.overflow {
+  margin-left: -20px;
 }
