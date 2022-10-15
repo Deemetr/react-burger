@@ -115,6 +115,7 @@ const authSlice = createSlice({
     [getUserThunk.fulfilled.toString()]: (state, { payload }) =>
       setUserData(state, payload),
     [requestPasswordResetThunk.fulfilled.toString()]: (state) => {
+      debugger;
       state.resetLinkSent = true;
       state.passwordReset = false;
     },

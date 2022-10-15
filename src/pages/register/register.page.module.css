@@ -25,3 +25,8 @@
 .link {
    color: #4C4CFF;
 }
+
+.register-page__button {
+   display: flex;
+   justify-content: center;
+ }

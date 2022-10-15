@@ -5,6 +5,7 @@ import {
   EmailInput
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import React from "react";
 import { useForm } from "../../hooks/useForm";
 import { ForgotPasswordData } from "../../models";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
@@ -20,7 +21,11 @@ export default function ForgotPasswordPage() {
 
   const dispatch = useAppDispatch();
 
-  const requestResetLink = () => {
+  const requestResetLink = (event: React.FormEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    debugger;
     dispatch(requestPasswordResetThunk((values as ForgotPasswordData).email));
   };
 
@@ -38,19 +43,21 @@ export default function ForgotPasswordPage() {
         Восстановление пароля
       </h2>
 
-      <form>
+      <form onSubmit={requestResetLink}>
         <EmailInput
           onChange={inputChange}
           value={values.email}
           name={"email"}
         />
-      </form>
 
-      <div className={getClassName(styles["forgot-password__button"], "pt-6")}>
-        <Button type="primary" size="medium" onClick={requestResetLink}>
-          Восстановить
-        </Button>
-      </div>
+        <div
+          className={getClassName(styles["forgot-password__button"], "pt-6")}
+        >
+          <Button type="primary" size="medium" htmlType="submit">
+            Восстановить
+          </Button>
+        </div>
+      </form>
 
       <div className={styles["forgot-password__new-user"]}>
         <span className="text text_type_main-default text_color_inactive">

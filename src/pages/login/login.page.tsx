@@ -9,6 +9,7 @@ import {
 import { useForm } from "../../hooks/useForm";
 import { getClassName } from "../../utils";
 
+import React from "react";
 import { LoginData } from "../../models";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { loginThunk } from "../../services/reducers/auth-reducer";
@@ -23,7 +24,10 @@ export default function Login() {
   const { loggedIn } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { state } = useLocation();
-  const login = () => {
+  const login = (event: React.FormEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     dispatch(loginThunk({ ...values }));
   };
 
@@ -35,7 +39,7 @@ export default function Login() {
     <div className={styles["login-page"]}>
       <h2 className={styles["login-page__title"]}>Войти</h2>
 
-      <form>
+      <form onSubmit={login}>
         <EmailInput
           onChange={inputChange}
           value={values["email"]}
@@ -47,13 +51,13 @@ export default function Login() {
           value={values["password"]}
           name={"password"}
         />
-      </form>
 
-      <div className={getClassName(styles["login-page__button"], "pt-6")}>
-        <Button type="primary" size="medium" onClick={login}>
-          Войти
-        </Button>
-      </div>
+        <div className={getClassName(styles["login-page__button"], "pt-6")}>
+          <Button type="primary" size="medium" htmlType="submit">
+            Войти
+          </Button>
+        </div>
+      </form>
 
       <div className={styles["login__new-user"]}>
         <span className="text text_type_main-default text_color_inactive">
