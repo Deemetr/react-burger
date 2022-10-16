@@ -1,5 +1,8 @@
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useCallback, useMemo } from "react";
+
+import { v4 as uuidv4 } from "uuid";
+
 import { IngredientType } from "../../enums";
 import { Ingredient, IngredientGroup } from "../../models";
 import { Order } from "../../models/order";
@@ -53,6 +56,7 @@ export default function OrderCard({ order }: { order: Order }) {
         image: ingredient?.image ?? "",
         type: ingredient?.type ?? IngredientType.MAIN,
         price: ingredient?.price ?? 0,
+        uuid: uuidv4(),
       };
     });
   }, [order]);
@@ -67,8 +71,8 @@ export default function OrderCard({ order }: { order: Order }) {
 
     return (
       <>
-        {firstFive.map((item) => (
-          <IngredientPreview key={item.id} imgSrc={item.image} />
+        {firstFive.map((item, index) => (
+          <IngredientPreview key={item.uuid} imgSrc={item.image} />
         ))}
         {moreThenFive && (
           <span className="ml-1 text text_type_digits-default">{`+${

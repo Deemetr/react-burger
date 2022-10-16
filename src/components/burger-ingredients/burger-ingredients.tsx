@@ -11,7 +11,7 @@ import { IngredientGroup } from "../../models";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { setCurrentTab } from "../../services/reducers/tabs-reducer";
 
-function BurgerIngredients(props: any) {
+function BurgerIngredients() {
   const refs = {
     [IngredientType.BUN]: useRef<HTMLDivElement>(null),
     [IngredientType.MAIN]: useRef<HTMLDivElement>(null),
@@ -110,7 +110,6 @@ function BurgerIngredients(props: any) {
             ingredients={group.items}
             key={group.title}
             groupRef={refs[group.type]}
-            {...props}
           />
         ))}
       </div>

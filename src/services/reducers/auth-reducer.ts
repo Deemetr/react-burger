@@ -10,7 +10,12 @@ import {
   updateUser
 } from "../api/auth.api.service";
 
-import { deleteCookie, setCookie } from "../../utils";
+import {
+  deleteCookie,
+  getCookie,
+  isTokenExpired,
+  setCookie
+} from "../../utils";
 
 export const registerUserThunk = createAsyncThunk(
   "auth/registerUser",
@@ -90,13 +95,16 @@ const clearState = (state: AuthStore) => {
   sessionStorage.removeItem("refreshToken");
 };
 
+const token = getCookie("token");
+const isExpired = isTokenExpired(token);
+
 const initialState: AuthStore = {
   user: {
     name: "",
     email: "",
     password: "",
   },
-  loggedIn: false,
+  loggedIn: !!token && !isExpired,
   resetLinkSent: false,
   passwordReset: false,
   accessToken: null,
