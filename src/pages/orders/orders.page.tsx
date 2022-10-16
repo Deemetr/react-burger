@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import OrderCard from "../../components/order-card/order-card";
 import ProfileNav from "../../components/profile-nav/profile-nav";
-import { Order as OrderType } from "../../models/order";
 import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { wsConnect, wsDisconnect } from "../../services/reducers/feed-reducer";
 import { getCookie } from "../../utils";
@@ -23,15 +22,17 @@ export default function OrdersPage() {
     };
   }, []);
 
-  const { orders }: { orders: OrderType[] } = useAppSelector(
-    (state) => state.feed
-  );
+  const { orders } = useAppSelector((state) => state.feed);
+
+  const _orders = useMemo(() => {
+    return [...orders].reverse();
+  }, [orders]);
 
   return (
     <div className={styles["orders-page"]}>
       <ProfileNav />
       <div className={styles["orders-list"]}>
-        {orders.map((order) => (
+        {_orders.map((order) => (
           <Link
             key={order._id}
             to={{

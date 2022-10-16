@@ -33,22 +33,28 @@ export default function OrderCard({ order }: { order: Order }) {
       return null;
     }
 
-    const flatIngredients: Ingredient[] = ingredients.reduce(
-      (state: Ingredient[], current: IngredientGroup) => [
-        ...state,
-        ...current.items,
-      ],
-      []
+    const flatIngredients = new Map(
+      ingredients
+        .reduce(
+          (state: Ingredient[], current: IngredientGroup) => [
+            ...state,
+            ...current.items,
+          ],
+          []
+        )
+        .map((item) => [item._id, item])
     );
 
-    return flatIngredients
-      .map((ingredient) => ({
-        id: ingredient._id,
-        image: ingredient.image,
-        type: ingredient.type,
-        price: ingredient.price,
-      }))
-      .filter((item) => order.ingredients.includes(item.id));
+    return order.ingredients.map((id) => {
+      const ingredient = flatIngredients.get(id);
+
+      return {
+        id: ingredient?._id ?? 0,
+        image: ingredient?.image ?? "",
+        type: ingredient?.type ?? IngredientType.MAIN,
+        price: ingredient?.price ?? 0,
+      };
+    });
   }, [order]);
 
   const renderIngredients = useCallback(() => {
