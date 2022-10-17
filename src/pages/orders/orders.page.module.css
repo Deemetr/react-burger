@@ -1,0 +1,15 @@
+.orders-page {
+  display: flex;
+}
+
+.orders-list {
+  width: 844px;
+  height: 600px;
+
+  overflow-y: auto;
+  padding-right: 15px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

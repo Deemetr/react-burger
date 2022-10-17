@@ -1,16 +1,21 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
-  registerUser,
+  getUser,
   login,
   logout,
   refreshToken,
-  getUser,
+  registerUser,
   requestPasswordReset,
   resetPassword,
-  updateUser,
+  updateUser
 } from "../api/auth.api.service";
 
-import { setCookie, deleteCookie, getCookie } from "../../utils";
+import {
+  deleteCookie,
+  getCookie,
+  isTokenExpired,
+  setCookie
+} from "../../utils";
 
 export const registerUserThunk = createAsyncThunk(
   "auth/registerUser",
@@ -33,16 +38,40 @@ export const resetPasswordThunk = createAsyncThunk(
 );
 export const updateUserThunk = createAsyncThunk("auth/updateUser", updateUser);
 
-const setUserData = (state, payload) => {
+interface User {
+  name: string;
+  email: string;
+  password: string;
+}
+
+interface AuthStore {
+  user: User;
+  loggedIn: boolean;
+  resetLinkSent: boolean;
+  passwordReset: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+}
+
+const setUserData = (state: AuthStore, payload: { user: User }) => {
   state.loggedIn = true;
   if (!payload) {
     return;
   }
 
-  state.user = { name: payload.user.name, email: payload.user.email };
+  state.user = {
+    name: payload.user.name,
+    email: payload.user.email,
+    password: "",
+  };
 };
 
-const updateState = (state, { payload }) => {
+const updateState = (
+  state: AuthStore,
+  {
+    payload,
+  }: { payload: { accessToken: string; refreshToken: string; user: User } }
+) => {
   if (!!payload.user) {
     setUserData(state, payload);
   }
@@ -51,7 +80,7 @@ const updateState = (state, { payload }) => {
   sessionStorage.setItem("refreshToken", payload.refreshToken);
 };
 
-const clearState = (state, _) => {
+const clearState = (state: AuthStore) => {
   state.accessToken = null;
   state.refreshToken = null;
   state.user = {
@@ -66,35 +95,42 @@ const clearState = (state, _) => {
   sessionStorage.removeItem("refreshToken");
 };
 
+const token = getCookie("token");
+const isExpired = isTokenExpired(token);
+
+const initialState: AuthStore = {
+  user: {
+    name: "",
+    email: "",
+    password: "",
+  },
+  loggedIn: !!token && !isExpired,
+  resetLinkSent: false,
+  passwordReset: false,
+  accessToken: null,
+  refreshToken: null,
+};
+
 const authSlice = createSlice({
   name: "auth",
-  initialState: {
-    user: {
-      name: "",
-      email: "",
-      password: "",
-    },
-    loggedIn: !!getCookie("token"),
-    resetLinkSent: false,
-    passwordReset: false,
-  },
+  initialState,
   reducers: {},
   extraReducers: {
-    [registerUserThunk.fulfilled]: updateState,
-    [loginThunk.fulfilled]: updateState,
-    [refreshTokenThunk.fulfilled]: updateState,
-    [logoutThunk.fulfilled]: clearState,
-    [getUserThunk.fulfilled]: (state, { payload }) =>
+    [registerUserThunk.fulfilled.toString()]: updateState,
+    [loginThunk.fulfilled.toString()]: updateState,
+    [refreshTokenThunk.fulfilled.toString()]: updateState,
+    [logoutThunk.fulfilled.toString()]: clearState,
+    [getUserThunk.fulfilled.toString()]: (state, { payload }) =>
       setUserData(state, payload),
-    [requestPasswordResetThunk.fulfilled]: (state) => {
+    [requestPasswordResetThunk.fulfilled.toString()]: (state) => {
       state.resetLinkSent = true;
       state.passwordReset = false;
     },
-    [resetPasswordThunk.fulfilled]: (state, action) => {
+    [resetPasswordThunk.fulfilled.toString()]: (state, action) => {
       state.resetLinkSent = false;
       state.passwordReset = true;
     },
-    [updateUserThunk.fulfilled]: (state, { payload }) =>
+    [updateUserThunk.fulfilled.toString()]: (state, { payload }) =>
       setUserData(state, payload),
   },
 });

@@ -1,7 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
 
-import { useDispatch } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -9,18 +7,10 @@ import BurgerConstructor from "../../components/burger-constructor/burger-constr
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import Modal from "../../components/modal/modal";
 import OrderDetails from "../../components/order-details/order-details";
-import { fetchIngredients } from "../../services/reducers/ingredients-reducer";
 
 import styles from "./home.page.module.css";
 
-
 export default function HomePage() {
-  const dispatch = useDispatch<any>();
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
-
   const [orderDetailsVisible, setOrderDetailsVisible] = React.useState(false);
 
   const handleOrderCloseModal = () => {

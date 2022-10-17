@@ -1,0 +1,39 @@
+.order {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  border-radius: 40px;
+
+  padding: 24px;
+
+  background: #1c1c21;
+}
+
+.order__info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order__content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order__ingredients {
+  display: flex;
+  padding-left: 16px;
+  align-items: center;
+}
+
+.order__price {
+  min-width: 73px;
+  display: flex;
+  align-items: center;
+}
+
+
+.overflow {
+  margin-left: -20px;
+}

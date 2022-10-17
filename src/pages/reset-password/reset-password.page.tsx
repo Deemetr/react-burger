@@ -9,13 +9,14 @@ import {
 import { useForm } from "../../hooks/useForm";
 import { getClassName } from "../../utils";
 
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { resetPasswordThunk } from "../../services/reducers/auth-reducer";
 import styles from "./reset-password.page.module.css";
 
 export default function ResetPasswordPage() {
-  const { passwordReset } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch<any>();
+  const { passwordReset } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   const [values, inputChange] = useForm({
     token: "",
@@ -26,7 +27,10 @@ export default function ResetPasswordPage() {
     return <Redirect to="/login" />;
   }
 
-  const resetPassword = () => {
+  const resetPassword = (event: React.FormEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+
     dispatch(resetPasswordThunk(values));
   };
 
@@ -36,7 +40,7 @@ export default function ResetPasswordPage() {
         Восстановление пароля
       </h2>
 
-      <form>
+      <form onSubmit={resetPassword}>
         <PasswordInput
           onChange={inputChange}
           value={values["password"]}
@@ -51,15 +55,18 @@ export default function ResetPasswordPage() {
           name={"token"}
           size={"default"}
         />
-      </form>
 
-      <div
-        className={getClassName(styles["reset-password-page__button"], "pt-6")}
-      >
-        <Button type="primary" size="medium" onClick={resetPassword}>
-          Сохранить
-        </Button>
-      </div>
+        <div
+          className={getClassName(
+            styles["reset-password-page__button"],
+            "pt-6"
+          )}
+        >
+          <Button type="primary" size="medium">
+            Сохранить
+          </Button>
+        </div>
+      </form>
 
       <div className={styles["reset-password-page__new-user"]}>
         <span className="text text_type_main-default text_color_inactive">

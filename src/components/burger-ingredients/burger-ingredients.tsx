@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import { getClassName } from "../../utils";
 import IngredientsGroup from "../ingredients-group/ingredients-group";
@@ -9,26 +8,25 @@ import style from "./burger-ingredients.module.css";
 
 import { IngredientType } from "../../enums";
 import { IngredientGroup } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { setCurrentTab } from "../../services/reducers/tabs-reducer";
 
-function BurgerIngredients(props: any) {
+function BurgerIngredients() {
   const refs = {
     [IngredientType.BUN]: useRef<HTMLDivElement>(null),
     [IngredientType.MAIN]: useRef<HTMLDivElement>(null),
     [IngredientType.SAUCE]: useRef<HTMLDivElement>(null),
   };
 
-  const ingredients = useSelector((state: any) => state.ingredients.items);
-  const currentTab: IngredientType = useSelector(
-    (store: any) => store.tabs.currentTab
+  const ingredients = useAppSelector((state) => state.ingredients.items);
+  const currentTab: IngredientType = useAppSelector(
+    (store) => store.tabs.currentTab
   );
-
-  const { ...other } = props;
 
   const groupsContainer = useRef<HTMLDivElement>(null);
   const tabsContainer = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // eslint-disable-next-line
   const handleScroll = (event: Event) => {
@@ -112,7 +110,6 @@ function BurgerIngredients(props: any) {
             ingredients={group.items}
             key={group.title}
             groupRef={refs[group.type]}
-            {...other}
           />
         ))}
       </div>

@@ -1,5 +1,3 @@
-import { useDispatch, useSelector } from "react-redux";
-
 import style from "./ingredient-details.module.css";
 
 import { useEffect, useState } from "react";
@@ -7,20 +5,13 @@ import { useLocation } from "react-router-dom";
 import { getClassName } from "../../utils";
 
 import { Ingredient, LocationState } from "../../models";
-import { fetchIngredients } from "../../services/reducers/ingredients-reducer";
+import { useAppSelector } from "../../services/reducers";
 
 function IngredientDetails() {
-  const { items }: { items: { items: Ingredient[] }[] } = useSelector(
-    (store: any) => store.ingredients
-  );
+  const { items } = useAppSelector((store) => store.ingredients);
   let [ingredient, setIngredient] = useState<Ingredient>();
 
   const location = useLocation<LocationState>();
-  const dispatch = useDispatch<any>();
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   useEffect(() => {
     const id = location.pathname.split("/").pop();

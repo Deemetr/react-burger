@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
-
 import {
   Button,
   EmailInput,
@@ -10,29 +8,34 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useForm } from "../../hooks/useForm";
-import { getClassName } from "../../utils";
 
 import {
   getUserThunk,
-  logoutThunk,
   updateUserThunk
 } from "../../services/reducers/auth-reducer";
 
+import ProfileNav from "../../components/profile-nav/profile-nav";
 import { User } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import styles from "./profile.page.module.css";
 
 export default function ProfilePage() {
-  const { user } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch<any>();
+  const { user } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
   const [values, onChange, setValues] = useForm<User>({
     name: user.name,
     login: user.email,
     password: user.password,
   });
 
-  const logout = () => {
-    dispatch(logoutThunk());
-  };
+  useEffect(() => {
+    setValues({
+      login: user.email,
+      name: user.name,
+      password: user.password,
+    });
+  }, [user]);
 
   useEffect(() => {
     dispatch(getUserThunk());
@@ -47,30 +50,7 @@ export default function ProfilePage() {
 
   return (
     <div className={styles["profile-page"]}>
-      <ul className={getClassName(styles.navigation, "mr-15")}>
-        <li
-          className={getClassName(styles["item"], "text text_type_main-medium")}
-        >
-          Профиль
-        </li>
-        <li
-          className={getClassName(
-            styles["item"],
-            "text text_type_main-medium text_color_inactive"
-          )}
-        >
-          История заказов
-        </li>
-        <li
-          className={getClassName(
-            styles["item"],
-            "text text_type_main-medium text_color_inactive"
-          )}
-          onClick={logout}
-        >
-          Выход
-        </li>
-      </ul>
+      <ProfileNav />
 
       <div className="user-data">
         <Input

@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
 
 import {
   Button,
@@ -8,7 +7,9 @@ import {
   CurrencyIcon
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { useHistory } from "react-router-dom";
 import { Ingredient } from "../../models";
+import { useAppDispatch, useAppSelector } from "../../services/reducers";
 import { addIngredient } from "../../services/reducers/ingredients-reducer";
 import {
   createOrderThunk,
@@ -23,13 +24,12 @@ function BurgerConstructor({
 }: {
   onOrderCreateClick: () => void;
 }) {
-  const {
-    selectedItems,
-    selectedBun: bun,
-  }: { selectedItems: Ingredient[]; selectedBun: Ingredient } = useSelector(
-    (store: any) => store.ingredients
+  const history = useHistory();
+  const { selectedItems, selectedBun: bun } = useAppSelector(
+    (store) => store.ingredients
   );
-  const dispatch = useDispatch<any>();
+  const { loggedIn } = useAppSelector((store) => store.auth);
+  const dispatch = useAppDispatch();
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -47,6 +47,11 @@ function BurgerConstructor({
   };
 
   const handlerCreateOrderClick = async () => {
+    if (!loggedIn) {
+      history.push("/login");
+      return;
+    }
+
     if (!selectedItems || selectedItems.length === 0) {
       return;
     }
@@ -63,10 +68,9 @@ function BurgerConstructor({
   };
 
   const totalPrice = useMemo(() => {
-    return selectedItems.reduce(
-      (acc, curr) => acc + curr.price,
-      bun?.price * 2 || 0
-    );
+    const initialValue = bun ? bun.price * 2 : 0;
+
+    return selectedItems.reduce((acc, curr) => acc + curr.price, initialValue);
   }, [selectedItems, bun]);
 
   const selectedIngredients = useMemo(() => {

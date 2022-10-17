@@ -1,25 +1,55 @@
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import { LocationState } from "../../models";
 
 import {
-  ForgotPasswordPage, HomePage, Login, NotFoundPage, ProfilePage, RegisterPage, ResetPasswordPage
+  Feed,
+  ForgotPasswordPage,
+  HomePage,
+  Login,
+  NotFoundPage,
+  OrderPage,
+  OrdersPage,
+  ProfilePage,
+  RegisterPage,
+  ResetPasswordPage
 } from "../../pages/index";
-import { setCurrentIngredient } from "../../services/reducers/ingredients-reducer";
+
+import { useAppDispatch } from "../../services/reducers";
+import { wsConnect, wsDisconnect } from "../../services/reducers/feed-reducer";
+import {
+  fetchIngredients,
+  setCurrentIngredient
+} from "../../services/reducers/ingredients-reducer";
 import { getClassName } from "../../utils";
 import AppHeader from "../app-header/app-header";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
+import Order from "../order/order";
 import { ProtectedRoute } from "../protected-route/protected-route";
 import style from "./app.module.css";
 
 function App() {
-  const location = useLocation<Location>();
+  const location = useLocation<LocationState>();
   const history = useHistory();
-  const dispatch = useDispatch<any>();
-  let background = location.state && (location.state as any).background;
+  let background = location.state && location.state.background;
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+    dispatch(wsConnect("wss://norma.nomoreparties.space/orders/all"));
+
+    return () => {
+      dispatch(wsDisconnect());
+    };
+  }, [dispatch]);
 
   const handleIngredientDetailsCloseModal = () => {
     dispatch(setCurrentIngredient(null));
+    history.goBack();
+  };
+
+  const handleCloseModal = () => {
     history.goBack();
   };
 
@@ -27,7 +57,7 @@ function App() {
     <>
       <AppHeader />
       <main className={getClassName(style.main, "content")}>
-        <Switch location={background || location}>
+        <Switch location={(background || location) as any}>
           <Route path="/" exact>
             <HomePage />
           </Route>
@@ -50,6 +80,18 @@ function App() {
           <ProtectedRoute path="/profile" exact>
             <ProfilePage />
           </ProtectedRoute>
+          <Route path="/feed" exact>
+            <Feed />
+          </Route>
+          <Route path="/feed/:id" exact>
+            <OrderPage />
+          </Route>
+          <ProtectedRoute path="/profile/orders/:id" exact>
+            <OrderPage />
+          </ProtectedRoute>
+          <ProtectedRoute path="/profile/orders" exact>
+            <OrdersPage />
+          </ProtectedRoute>
 
           <Route>
             <NotFoundPage />
@@ -67,6 +109,28 @@ function App() {
               isOpen={true}
             >
               <IngredientDetails />
+            </Modal>
+          }
+        />
+      )}
+
+      {background && (
+        <Route
+          path="/feed/:id"
+          children={
+            <Modal onClose={handleCloseModal} isOpen={true}>
+              <Order />
+            </Modal>
+          }
+        />
+      )}
+
+      {background && (
+        <Route
+          path="/profile/orders/:id"
+          children={
+            <Modal onClose={handleCloseModal} isOpen={true}>
+              <Order />
             </Modal>
           }
         />

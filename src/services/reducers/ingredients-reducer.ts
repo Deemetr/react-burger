@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
 import { INGREDIENT_TYPES } from "../../constants";
+import { Ingredient, IngredientGroup } from "../../models";
 import { getIngredients } from "../ingredients.service";
 
 import { setOrderObject } from "./orders-reducer";
@@ -12,21 +13,34 @@ export const fetchIngredients = createAsyncThunk(
   getIngredients
 );
 
+interface IngredientsStore {
+  items: IngredientGroup[];
+  selectedItems: Ingredient[];
+  currentIngredient: Ingredient | null;
+  selectedBun: Ingredient | null;
+  counters: { [key: string]: number };
+}
+
+const initialState: IngredientsStore = {
+  items: [],
+  selectedItems: [],
+  currentIngredient: null,
+  selectedBun: null,
+  counters: {},
+};
+
 const ingredientsSlice = createSlice({
   name: "ingredients",
-  initialState: {
-    items: [],
-    selectedItems: [],
-    currentIngredient: null,
-    selectedBun: null,
-    counters: {},
-  },
+  initialState,
   reducers: {
     addIngredient(state, action) {
       const ingredient = action.payload;
 
       if (ingredient.type === INGREDIENT_TYPES.BUN) {
-        state.counters[state.selectedBun?._id] = 0;
+        if (state.selectedBun) {
+          state.counters[state.selectedBun._id] = 0;
+        }
+
         state.counters[ingredient._id] = 2;
         state.selectedBun = ingredient;
         return;
@@ -58,10 +72,10 @@ const ingredientsSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchIngredients.fulfilled]: (state, action) => {
+    [fetchIngredients.fulfilled.toString()]: (state, action) => {
       state.items = action.payload;
     },
-    [setOrderObject]: (state, action) => {
+    [setOrderObject.toString()]: (state, action) => {
       state.selectedItems = [];
       state.selectedBun = null;
       state.counters = {};
@@ -75,5 +89,4 @@ export const {
   removeIngredient,
   setCurrentIngredient,
   moveIngredient,
-  setCurrentIngredientById,
 } = ingredientsSlice.actions;

@@ -1,11 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { INGREDIENT_TYPES } from "../../constants";
+import { IngredientType } from "../../enums";
+
+interface TabStore {
+  currentTab: IngredientType;
+}
+
+const initialState: TabStore = {
+  currentTab: IngredientType.BUN,
+};
 
 const tabsSlice = createSlice({
   name: "tabs",
-  initialState: {
-    currentTab: INGREDIENT_TYPES.BUN,
-  },
+  initialState,
   reducers: {
     setCurrentTab(state, action) {
       state.currentTab = action.payload;

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { useSelector } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router-dom";
 import { LocationState } from "../../models";
+import { useAppSelector } from "../../services/reducers";
 
 export function ProtectedRoute({
   children,
@@ -15,7 +15,7 @@ export function ProtectedRoute({
   path: string;
   exact: boolean;
 }) {
-  const { loggedIn } = useSelector((state: any) => state.auth);
+  const { loggedIn } = useAppSelector((state) => state.auth);
   const location = useLocation<LocationState>();
 
   if (onlyAnonimous && loggedIn) {
