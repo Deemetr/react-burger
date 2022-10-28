@@ -1,9 +1,67 @@
-# My awesome burger app
+# Ещё одно приложение Космобургерной
+Проект для изучения React
 
-[![BCH compliance](https://bettercodehub.com/edge/badge/Deemetr/react-burger?branch=master)](https://bettercodehub.com/)
+Проект создан с использованем [Create React App](https://github.com/facebook/create-react-app).
+## Запуск на локальной машине
 
-Project to study React
+Склонируйте репозиторий
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```bash
+  git clone https://github.com/Deemetr/react-burger
+```
 
-Github pages: https://deemetr.github.io/react-burger/index.html
+Перейдите в каталог с репощиторием
+
+```bash
+  cd react-burger
+```
+
+Установите зависимости
+
+```bash
+  npm install
+```
+
+Запустите сервер разраотки
+
+```bash
+  npm run start
+```
+
+
+## Тесты
+
+Для запуска unit-тестов выполните команду
+
+```bash
+  npm run test
+```
+
+Для запуска e2e тестов выполните команду ниже и следуйте указаниям открывшегося приложения
+
+```bash
+  npm run cypress:open
+```
+
+
+## Развёртывание приложения
+
+Для развёртывания используется Github Pages.
+
+Комманда обновления приложения:
+
+```bash
+  npm run deploy
+```
+
+## Технический стек
+
+React, Redux Toolkit, react-dnd, react-router-dom
+
+**Тесты:** Jest, Cypress
+
+
+## Демо
+
+https://deemetr.github.io/react-burger/index.html
+
