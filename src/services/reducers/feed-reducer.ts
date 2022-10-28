@@ -13,7 +13,7 @@ interface FeedStore {
   totalToday: number;
 }
 
-const initialState: FeedStore = {
+export const initialState: FeedStore = {
   wsConnected: false,
   messages: [],
   error: undefined,

@@ -5,7 +5,7 @@ interface TabStore {
   currentTab: IngredientType;
 }
 
-const initialState: TabStore = {
+export const initialState: TabStore = {
   currentTab: IngredientType.BUN,
 };
 

@@ -66,12 +66,16 @@ const setUserData = (state: AuthStore, payload: { user: User }) => {
   };
 };
 
-const updateState = (
-  state: AuthStore,
-  {
-    payload,
-  }: { payload: { accessToken: string; refreshToken: string; user: User } }
-) => {
+interface UpdateStateAction {
+  payload: UpdateStatePayload;
+}
+interface UpdateStatePayload {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
+const updateState = (state: AuthStore, { payload }: UpdateStateAction) => { 
   if (!!payload.user) {
     setUserData(state, payload);
   }
@@ -98,7 +102,7 @@ const clearState = (state: AuthStore) => {
 const token = getCookie("token");
 const isExpired = isTokenExpired(token);
 
-const initialState: AuthStore = {
+export const initialState: AuthStore = {
   user: {
     name: "",
     email: "",

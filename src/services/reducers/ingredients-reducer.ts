@@ -13,7 +13,7 @@ export const fetchIngredients = createAsyncThunk(
   getIngredients
 );
 
-interface IngredientsStore {
+export interface IngredientsStore {
   items: IngredientGroup[];
   selectedItems: Ingredient[];
   currentIngredient: Ingredient | null;
@@ -21,7 +21,7 @@ interface IngredientsStore {
   counters: { [key: string]: number };
 }
 
-const initialState: IngredientsStore = {
+export const initialState: IngredientsStore = {
   items: [],
   selectedItems: [],
   currentIngredient: null,
