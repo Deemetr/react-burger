@@ -14,8 +14,8 @@ function ModalHeader({
       <h2 className={getClassName(style.title, "text text_type_main-large")}>
         {children}
       </h2>
-      <div className={style["close-button-wrapper"]}>
-        <CloseIcon onClick={onClose} type="primary" />
+      <div className={style["close-button-wrapper"]} onClick={onClose}>
+        <CloseIcon type="primary" />
       </div>
     </div>
   );

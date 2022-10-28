@@ -7,7 +7,7 @@ export const createOrderThunk = createAsyncThunk(
   createOrder
 );
 
-interface CurrentOrder {
+export interface CurrentOrder {
   name: string;
   number: number | null;
 }
@@ -17,7 +17,7 @@ interface OrderStore {
   requestOrder: boolean;
 }
 
-const initialState: OrderStore = {
+export const initialState: OrderStore = {
   currentOrder: {
     name: "",
     number: null,
