@@ -10,7 +10,7 @@
   git clone https://github.com/Deemetr/react-burger
 ```
 
-Перейдите в каталог с репощиторием
+Перейдите в каталог с репозиторием
 
 ```bash
   cd react-burger
